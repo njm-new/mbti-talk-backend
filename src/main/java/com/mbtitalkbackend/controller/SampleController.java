@@ -19,7 +19,7 @@ public class SampleController {
     @GetMapping("/")
     public String printHelloWorld() {
 
-        return "Hello World!";
+        return "Hello World! with pr-test";
     }
 
     @GetMapping("/sampledata")
