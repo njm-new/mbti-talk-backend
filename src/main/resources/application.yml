@@ -4,6 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: "com.mysql.cj.jdbc.Driver"
-    url: "jdbc:mysql://mbti-talk-backend-db.c3qthxrb2jck.ap-northeast-2.rds.amazonaws.com/mbti-talk-backend?characterEncoding=UTF-8&serverTimezone=UTC"
-    username: "admin"
-    password: "rkdtlsgus1!"
+    #url: "jdbc:mysql://mbti-talk-backend-db.c3qthxrb2jck.ap-northeast-2.rds.amazonaws.com/mbti-talk-backend-db?characterEncoding=UTF-8&serverTimezone=UTC"
+    #username: "admin"
+    #password: "rkdtlsgus1!"
+    url: "jdbc:mysql://localhost:3310/mbti-talk-backend-db?characterEncoding=UTF-8&serverTimezone=UTC"
+    username: "root"
+    password: "1234"

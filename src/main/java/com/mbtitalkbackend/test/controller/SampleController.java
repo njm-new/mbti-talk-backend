@@ -1,10 +1,10 @@
-package com.mbtitalkbackend.controller;
+package com.mbtitalkbackend.test.controller;
 
-import com.mbtitalkbackend.domain.ResultVO;
-import com.mbtitalkbackend.domain.SampleDataVO;
-import com.mbtitalkbackend.service.SampleService;
-import org.apache.ibatis.annotations.Delete;
+import com.mbtitalkbackend.common.model.ResultVO;
+import com.mbtitalkbackend.test.domain.SampleDataVO;
+import com.mbtitalkbackend.test.service.SampleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +34,10 @@ public class SampleController {
         int res = sampleService.saveSampleDataVO(sampleDataVO);
 
         if(res > 0) {
-            return new ResultVO(0, "success");
+            return new ResultVO(HttpStatus.NOT_FOUND, "not found"); // HTTP-STATUS.OK
         }
         else {
-            return new ResultVO(100, "fail");
+            return new ResultVO(HttpStatus.OK, "success"); // HTTP-STATUS.OK
         }
     }
 
@@ -53,10 +53,10 @@ public class SampleController {
         int res = sampleService.deleteSampleDataVOById(id);
 
         if(res > 0) {
-            return new ResultVO(0, "success");
+            return new ResultVO(HttpStatus.NOT_FOUND, "not found"); // HTTP-STATUS.OK
         }
         else {
-            return new ResultVO(100, "fail");
+            return new ResultVO(HttpStatus.OK, "success"); // HTTP-STATUS.OK
         }
     }
 }

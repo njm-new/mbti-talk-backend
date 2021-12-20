@@ -1,4 +1,4 @@
-package com.mbtitalkbackend.domain;
+package com.mbtitalkbackend.test.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

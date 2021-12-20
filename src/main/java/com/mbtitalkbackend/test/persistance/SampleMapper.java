@@ -1,6 +1,6 @@
-package com.mbtitalkbackend.persistance;
+package com.mbtitalkbackend.test.persistance;
 
-import com.mbtitalkbackend.domain.SampleDataVO;
+import com.mbtitalkbackend.test.domain.SampleDataVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;

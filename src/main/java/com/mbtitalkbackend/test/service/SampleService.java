@@ -1,6 +1,6 @@
-package com.mbtitalkbackend.service;
+package com.mbtitalkbackend.test.service;
 
-import com.mbtitalkbackend.domain.SampleDataVO;
+import com.mbtitalkbackend.test.domain.SampleDataVO;
 
 import java.util.List;
 
