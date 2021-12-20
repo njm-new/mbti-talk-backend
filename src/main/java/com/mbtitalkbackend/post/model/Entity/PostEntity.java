@@ -14,7 +14,7 @@ public class PostEntity {
 
     private long post_id;
     private int board_id;
-    private String member_id;
+    private int member_id;
     private String title;
     private String content;
     private long view_count;
@@ -22,7 +22,7 @@ public class PostEntity {
     private Timestamp create_time;
     private Timestamp modified_time;
 
-    public PostEntity(int board_id, String member_id, String title, String content, long view_count, long like_count) {
+    public PostEntity(int board_id, int member_id, String title, String content, long view_count, long like_count) {
         this.board_id = board_id;
         this.member_id = member_id;
         this.title = title;

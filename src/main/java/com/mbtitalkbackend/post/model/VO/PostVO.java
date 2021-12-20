@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PostVO {
 
     private int board_id;
-    private String member_id;
+    private int member_id;
     private String title;
     private String content;
 }
