@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface MemberMapper {
-    @Insert("INSERT INTO member (memberId, nickname, memberMbti, content, createTime, modifiedTime) VALUES (#{memberId}, #{nickname}, #{memberMbti}, #{content}, createTime, modifiedTime)")
+    @Insert("INSERT INTO member (memberId, nickname, memberMbti, content, createTime, modifiedTime) VALUES (#{memberId}, #{nickname}, #{memberMbti}, #{content}, #{createTime}, #{modifiedTime})")
     Integer insertMember(MemberEntity member);
 
     @Select("SELECT * FROM member WHERE memberId = #{memberId}")
