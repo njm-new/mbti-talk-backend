@@ -22,12 +22,12 @@ public class MemberRepository {
             return null;
         }
 
-        return MemberDTO.of(memberEntity.getMemberId(), memberEntity.getNickname());
+        return MemberDTO.from(memberEntity);
     }
 
     public boolean signUp(MemberDTO member) {
         Date date = new Date();
-        return memberMapper.insertMember(new MemberEntity(member.getMemberId(), member.getNickname(), member.getMemberMbti(), member.getContent(), date, date)) > 0;
+        return memberMapper.insertMember(MemberEntity.of(member, date, date)) > 0;
     }
 
     public boolean existNickname(String nickname) {
@@ -36,6 +36,6 @@ public class MemberRepository {
 
     public boolean update(MemberDTO member) {
         Date date = new Date();
-        return memberMapper.patchMember(new MemberEntity(member.getMemberId(), member.getNickname(), member.getMemberMbti(), member.getContent(), date, date)) > 0;
+        return memberMapper.patchMember(MemberEntity.of(member, date, date)) > 0;
     }
 }
