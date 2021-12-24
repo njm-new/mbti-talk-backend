@@ -1,41 +1,36 @@
 package com.mbtitalkbackend.post.model.Entity;
 
 import com.mbtitalkbackend.post.model.VO.PostVO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.sql.Timestamp;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostEntity {
 
-    private long post_id;
-    private int board_id;
-    private int member_id;
+    private long postId;
+    private String boardId;
+    private int memberId;
     private String title;
     private String content;
-    private long view_count;
-    private long like_count;
-    private Timestamp create_time;
-    private Timestamp modified_time;
+    private long viewCount;
+    private long likeCount;
+    private Timestamp createTime;
+    private Timestamp modifiedTime;
 
-    public PostEntity(int board_id, int member_id, String title, String content, long view_count, long like_count) {
-        this.board_id = board_id;
-        this.member_id = member_id;
-        this.title = title;
-        this.content = content;
-        this.view_count = view_count;
-        this.like_count = like_count;
-    }
-
-    public PostEntity(int post_id, PostVO postVO) {
-        this.post_id = post_id;
-        this.board_id = postVO.getBoard_id();
-        this.member_id = postVO.getMember_id();
+    PostEntity(PostVO postVO, long viewCount, long likeCount) {
+        this.boardId = postVO.getBoardId();
+        this.memberId = postVO.getMemberId();
         this.title = postVO.getTitle();
         this.content = postVO.getContent();
+        this.viewCount = viewCount;
+        this.likeCount = likeCount;
+    }
+
+    public static PostEntity create(PostVO postVO) {
+
+        return new PostEntity(postVO, 0, 0);
     }
 }

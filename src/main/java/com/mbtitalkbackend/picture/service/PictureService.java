@@ -1,10 +1,19 @@
 package com.mbtitalkbackend.picture.service;
 
+import com.mbtitalkbackend.picture.mapper.PictureMapper;
 import com.mbtitalkbackend.picture.model.Entity.PictureEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PictureService {
+@Service
+@RequiredArgsConstructor
+public class PictureService {
 
-    List<PictureEntity> findAllPictureEntityByPostId(long post_id);
+    private final PictureMapper pictureMapper;
+
+    public List<PictureEntity> findAllPictureEntityByPostId(long postId) {
+        return pictureMapper.findAllPictureEntityByPostId(postId);
+    }
 }

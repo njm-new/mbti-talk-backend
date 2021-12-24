@@ -1,16 +1,56 @@
 package com.mbtitalkbackend.post.service;
 
+import com.mbtitalkbackend.post.mapper.PostMapper;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import com.mbtitalkbackend.post.model.VO.PostVO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-public interface PostService {
+@Service
+@RequiredArgsConstructor
+public class PostService {
 
-    PostEntity findPostEntityById(long post_id);
+    private final PostMapper postMapper;
 
-    Integer createPost(PostVO postVO);
+    public PostVO findPostEntityById(long postId) {
 
-    Integer patchPostById(long post_id, PostVO postVO);
+        try {
+            postMapper.increaseViewCount(postId);
 
-    Integer deletePostById(long post_id);
+            PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
 
+            return PostVO.of(postEntity);
+        }
+        catch (NullPointerException e) {
+            throw new NullPointerException();
+        }
+    }
+
+    public Integer createPost(PostVO postVO) {
+
+        PostEntity postEntity = PostEntity.create(postVO);
+
+        return postMapper.postPost(postEntity);
+    }
+
+    public Integer patchPostById(long postId, PostVO postVO) {
+
+        postMapper.updatePostModifiedTime(postId);
+        PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
+
+        if(postEntity == null)
+            return 0;
+
+        postEntity.setBoardId(postVO.getBoardId());
+        postEntity.setMemberId(postVO.getMemberId());
+        postEntity.setTitle(postVO.getTitle());
+        postEntity.setContent(postVO.getContent());
+
+
+        return postMapper.updatePost(postEntity);
+    }
+
+    public Integer deletePostById(long postId) {
+        return postMapper.deletePostByPostId(postId);
+    }
 }

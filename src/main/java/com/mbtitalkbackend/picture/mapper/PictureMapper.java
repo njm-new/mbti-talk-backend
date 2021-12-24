@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface PictureMapper {
 
-    @Select("SELECT * FROM picture WHERE post_id = #{post_id}")
-    List<PictureEntity> findAllPictureEntityByPostId(long post_id);
+    @Select("SELECT * FROM picture WHERE postId = #{postId}")
+    List<PictureEntity> findAllPictureEntityByPostId(long postId);
 
-    @Select("UPDATE picture SET picture_name = #{picture_name}, picture_url = #{picture_url}, comment = #{comment}")
+    @Select("UPDATE picture SET pictureName = #{pictureName}, pictureUrl = #{pictureUrl}, comment = #{comment}")
     int updatePictureByPictureId(PictureEntity pictureEntity);
 }

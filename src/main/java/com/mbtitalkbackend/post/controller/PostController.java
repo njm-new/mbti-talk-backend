@@ -1,14 +1,12 @@
 package com.mbtitalkbackend.post.controller;
 
-import com.mbtitalkbackend.common.model.ResultVO;
-import com.mbtitalkbackend.post.model.Entity.PostEntity;
+import com.mbtitalkbackend.common.ApiResponse;
 import com.mbtitalkbackend.post.model.VO.PostVO;
 import com.mbtitalkbackend.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,46 +16,49 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResultVO createPosts(@RequestBody PostVO postVO) {
+    public ResponseEntity<ApiResponse> createPosts(@RequestBody PostVO postVO) {
 
         int res = postService.createPost(postVO);
 
         if(res > 0)
-            return new ResultVO(HttpStatus.OK, "success"); // HTTP-STATUS.OK
+            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK); // HTTP-STATUS.OK
         else
-            return new ResultVO(HttpStatus.BAD_REQUEST, "failed"); // HTTP-STATUS.OK
+            return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST); // HTTP-STATUS.OK
     }
 
-    @GetMapping("/{post_id}") // 호출할일 없고, 디자인 잘해놨으면 메소드가 구분할 필요가없다
-    public Object readPostsByPostId(@PathVariable("post_id") long post_id) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
+    @GetMapping("/{postId}") // 호출할일 없고, 디자인 잘해놨으면 메소드가 구분할 필요가없다
+    public ResponseEntity<ApiResponse> readPostsByPostId(@PathVariable("postId") long postId) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
 
-        PostEntity postEntity = postService.findPostEntityById(post_id);//서비스 안에서 처리
+        try {
+            PostVO postVO = postService.findPostEntityById(postId);
 
-        if(postEntity == null)
-            return new ResultVO(HttpStatus.NOT_FOUND, "fail");
-        else
-            return new ResultVO(HttpStatus.OK, "success", postEntity);
+            return new ResponseEntity<>(ApiResponse.success(postVO), HttpStatus.OK);
+        }
+        catch (NullPointerException e) {
+            String message = "postId에 해당하는 테이블이 없습니다.";
+            return new ResponseEntity<>(ApiResponse.fail(message), HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PatchMapping("/{post_id}")
-    public ResultVO updatePostByPostId(@PathVariable("post_id") long post_id, @RequestBody PostVO postVO) {
+    @PatchMapping("/{postId}")
+    public ResponseEntity<ApiResponse> updatePostByPostId(@PathVariable("postId") long postId, @RequestBody PostVO postVO) {
 
-        int res = postService.patchPostById(post_id, postVO);
+        int res = postService.patchPostById(postId, postVO);
 
         if(res > 0)
-            return new ResultVO(HttpStatus.OK, "success");
+            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
         else
-            return new ResultVO(HttpStatus.BAD_REQUEST, "fail");
+            return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping("/{post_id}")
-    public ResultVO deletePostByPostId(@PathVariable("post_id") long post_id) {
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ApiResponse> deletePostByPostId(@PathVariable("postId") long postId) {
 
-        int res = postService.deletePostById(post_id);
+        int res = postService.deletePostById(postId);
 
         if(res > 0)
-            return new ResultVO(HttpStatus.OK, "success");
+            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
         else
-            return new ResultVO(HttpStatus.BAD_REQUEST, "fail");
+            return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST);
     }
 }
