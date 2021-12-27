@@ -20,7 +20,7 @@ public class PostEntity {
     private Timestamp createTime;
     private Timestamp modifiedTime;
 
-    PostEntity(PostVO postVO, long viewCount, long likeCount) {
+    private PostEntity(PostVO postVO, long viewCount, long likeCount) {
         this.boardId = postVO.getBoardId();
         this.memberId = postVO.getMemberId();
         this.title = postVO.getTitle();

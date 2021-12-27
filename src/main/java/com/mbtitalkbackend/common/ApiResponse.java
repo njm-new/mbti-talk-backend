@@ -11,7 +11,7 @@ public class ApiResponse { //apirespose, 바디(데이터) 추가
     private String message;
     private Object body;
 
-    public static ApiResponse success (Object body) {
+    public static ApiResponse success(Object body) {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.code = ResponseCode.SUCCESS;
@@ -21,7 +21,7 @@ public class ApiResponse { //apirespose, 바디(데이터) 추가
         return apiResponse;
     }
 
-    public static ApiResponse success () {
+    public static ApiResponse success() {
         ApiResponse apiResponse = new ApiResponse();
 
         apiResponse.code = ResponseCode.SUCCESS;
