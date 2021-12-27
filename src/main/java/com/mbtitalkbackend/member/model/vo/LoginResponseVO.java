@@ -1,10 +1,10 @@
 package com.mbtitalkbackend.member.model.vo;
 
 import com.mbtitalkbackend.member.model.dto.MemberDTO;
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class LoginResponseVO {
     String jwt;

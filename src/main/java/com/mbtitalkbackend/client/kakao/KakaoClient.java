@@ -1,4 +1,4 @@
-package com.mbtitalkbackend.client;
+package com.mbtitalkbackend.client.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,22 +22,29 @@ import java.util.Map;
 @Service
 public class KakaoClient {
     private final WebClient webClient;
+    private final String GRANT_TYPE;
+    private final String CLIENT_ID;
+    private final String REDIRECT_URI;
     private final Logger logger = LoggerFactory.getLogger(KakaoClient.class);
 
-    @Autowired
-    public KakaoClient(WebClient webClient) {
+    public KakaoClient(WebClient webClient,
+                       @Value("${cred.kakao.grant-type}") String grantType,
+                       @Value("${cred.kakao.client-id}") String clientId,
+                       @Value("${cred.kakao.redirect-uri}") String redirectUri) {
         this.webClient = webClient;
+        this.GRANT_TYPE = grantType;
+        this.CLIENT_ID = clientId;
+        this.REDIRECT_URI = redirectUri;
     }
 
     public String getAccessToken(String code) throws JsonProcessingException {
         MultiValueMap<String, String> payload = new LinkedMultiValueMap<>();
-        payload.add("grant_type", "authorization_code");
-        payload.add("client_id", "51ebe5eee7b316d51aaf6b3aa6a87496");
-        payload.add("redirect_uri", "http://localhost:3000/callback");
+        payload.add("grant_type", GRANT_TYPE);
+        payload.add("client_id", CLIENT_ID);
+        payload.add("redirect_uri", REDIRECT_URI);
         payload.add("code", code);
 
-        Mono<String> responseMonoString;
-        responseMonoString = webClient.mutate()
+        Mono<KaKaoAccessTokenEntity> kaKaoAccessTokenEntityMono = webClient.mutate()
                 .baseUrl("https://kauth.kakao.com")
                 .build()
                 .post()
@@ -46,29 +53,21 @@ public class KakaoClient {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue(payload)
                 .exchangeToMono(clientResponse -> {
-                    if (!clientResponse.statusCode().equals(HttpStatus.OK)) {
+                    if (clientResponse.statusCode() != HttpStatus.OK) {
                         return null;
                     }
-                    return clientResponse.bodyToMono(String.class);
+                    return clientResponse.bodyToMono(KaKaoAccessTokenEntity.class);
                 });
 
-        String reseponseString = responseMonoString.flux()
-                .toStream()
-                .findFirst()
-                .orElse(null);
+        KaKaoAccessTokenEntity kaKaoAccessTokenEntity = kaKaoAccessTokenEntityMono
+                .share()
+                .block();
 
-        //Convert String to Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> responseJson;
-
-        responseJson = objectMapper.readValue(reseponseString, new TypeReference<>() {
-        });
-
-        return (String) responseJson.get("access_token");
+        return kaKaoAccessTokenEntity.getAccess_token();
     }
 
     public int getMemberId(String accessToken) throws JsonProcessingException {
-        String responseString = webClient.mutate()
+        Mono<KakaoMemberEntity> kakaoMemberEntityMono = webClient.mutate()
                 .baseUrl("https://kapi.kakao.com")
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .build()
@@ -76,17 +75,12 @@ public class KakaoClient {
                 .uri("/v2/user/me")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(String.class)
-                .flux()
-                .toStream()
-                .findFirst()
-                .orElse(null);
+                .bodyToMono(KakaoMemberEntity.class);
 
-        //Convert String to Map
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> responseJson = objectMapper.readValue(responseString, new TypeReference<>() {
-        });
+        KakaoMemberEntity kakaoMemberEntity = kakaoMemberEntityMono
+                .share()
+                .block();
 
-        return (int) responseJson.get("id");
+        return kakaoMemberEntity.getId();
     }
 }

@@ -24,10 +24,11 @@ public class WebClientConfig {
                 .build();
 
         HttpClient httpClient = HttpClient.create()
-                .responseTimeout(Duration.ofSeconds(120))
+                .responseTimeout(Duration.ofSeconds(10))
                 .doOnConnected(connection -> connection
-                        .addHandler(new ReadTimeoutHandler(180, TimeUnit.SECONDS))
-                        .addHandlerLast(new WriteTimeoutHandler(180, TimeUnit.SECONDS)))
+                        .addHandler(new ReadTimeoutHandler(10, TimeUnit.SECONDS))
+                        .addHandlerLast(new WriteTimeoutHandler(10, TimeUnit.SECONDS)))
+
                 .secure(ThrowingConsumer.unchecked(
                         sslContextSpec -> sslContextSpec.sslContext(
                                 SslContextBuilder

@@ -28,7 +28,7 @@ public class JsonWebToken {
                 .compact();
     }
 
-    public static Claims validate(String token) {
+    public Claims validate(String token) {
         String tokenHeader = "Bearer";
 
         //Validate Authorization Header
