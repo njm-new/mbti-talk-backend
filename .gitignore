@@ -146,3 +146,6 @@ bin
 
 ### NetBeans ###
 build/
+
+### For MAC OS ###
+.DS_Store
