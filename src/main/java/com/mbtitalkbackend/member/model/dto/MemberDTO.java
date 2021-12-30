@@ -1,12 +1,18 @@
 package com.mbtitalkbackend.member.model.dto;
 
-import lombok.Data;
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberDTO {
     private int memberId;
     private String nickname;
-    private String memberMbti = null;
+    private String mbti = null;
     private String content = null;
 
     private MemberDTO(int memberId, String nickname) {
@@ -14,20 +20,11 @@ public class MemberDTO {
         this.nickname = nickname;
     }
 
-    public static MemberDTO of(int memberId, String nickname) {
-        return new MemberDTO(memberId, nickname);
+    public static MemberDTO from(MemberEntity member) {
+        return new MemberDTO(member.getMemberId(), member.getNickname(), member.getMbti(), member.getContent());
     }
 
-    public static class Builder {
-        private final int memberId;
-        private final String nickname;
-
-        private String memberMbti = null;
-        private String content = null;
-
-        public Builder(int memberId, String nickname) {
-            this.memberId = memberId;
-            this.nickname = nickname;
-        }
+    public static MemberDTO of(int memberId, String nickname) {
+        return new MemberDTO(memberId, nickname);
     }
 }

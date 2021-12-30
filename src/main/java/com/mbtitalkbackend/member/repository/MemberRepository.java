@@ -5,6 +5,7 @@ import com.mbtitalkbackend.member.model.dto.MemberDTO;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Repository
@@ -31,11 +32,22 @@ public class MemberRepository {
     }
 
     public boolean existNickname(String nickname) {
-        return memberMapper.existNickname(nickname) > 0;
+        return memberMapper.existNicknameAll(nickname) > 0;
+    }
+    public boolean existNickname(int memberId, String nickname) {
+        return memberMapper.existNickname(memberId, nickname) > 0;
     }
 
     public boolean update(MemberDTO member) {
         Date date = new Date();
         return memberMapper.patchMember(MemberEntity.of(member, date, date)) > 0;
+    }
+
+    public boolean updateMbti(int memberId, String mbti) {
+        return memberMapper.putMbti(memberId, mbti) > 0;
+    }
+
+    public boolean updateNickname(int memberId, String nickname) {
+        return memberMapper.putMbti(memberId, nickname) > 0;
     }
 }

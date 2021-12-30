@@ -3,6 +3,7 @@ package com.mbtitalkbackend.client.kakao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,42 +45,54 @@ public class KakaoClient {
         payload.add("redirect_uri", REDIRECT_URI);
         payload.add("code", code);
 
-        Mono<KaKaoAccessTokenEntity> kaKaoAccessTokenEntityMono = webClient.mutate()
-                .baseUrl("https://kauth.kakao.com")
-                .build()
-                .post()
-                .uri("/oauth/token")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(payload)
-                .exchangeToMono(clientResponse -> {
-                    if (clientResponse.statusCode() != HttpStatus.OK) {
-                        return null;
-                    }
-                    return clientResponse.bodyToMono(KaKaoAccessTokenEntity.class);
-                });
+        KaKaoAccessTokenEntity kaKaoAccessTokenEntity;
+        try {
+            Mono<KaKaoAccessTokenEntity> kaKaoAccessTokenEntityMono = webClient.mutate()
+                    .baseUrl("https://kauth.kakao.com")
+                    .build()
+                    .post()
+                    .uri("/oauth/token")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .bodyValue(payload)
+                    .exchangeToMono(clientResponse -> {
+                        if (clientResponse.statusCode() != HttpStatus.OK) {
+                            return null;
+                        }
+                        return clientResponse.bodyToMono(KaKaoAccessTokenEntity.class);
+                    });
 
-        KaKaoAccessTokenEntity kaKaoAccessTokenEntity = kaKaoAccessTokenEntityMono
-                .share()
-                .block();
-
+            kaKaoAccessTokenEntity = kaKaoAccessTokenEntityMono
+                    .share()
+                    .block();
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            throw new KakaoAuthenticationException();
+        }
         return kaKaoAccessTokenEntity.getAccess_token();
     }
 
     public int getMemberId(String accessToken) throws JsonProcessingException {
-        Mono<KakaoMemberEntity> kakaoMemberEntityMono = webClient.mutate()
-                .baseUrl("https://kapi.kakao.com")
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .build()
-                .post()
-                .uri("/v2/user/me")
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(KakaoMemberEntity.class);
+        KakaoMemberEntity kakaoMemberEntity;
 
-        KakaoMemberEntity kakaoMemberEntity = kakaoMemberEntityMono
-                .share()
-                .block();
+        try {
+            Mono<KakaoMemberEntity> kakaoMemberEntityMono = webClient.mutate()
+                    .baseUrl("https://kapi.kakao.com")
+                    .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .build()
+                    .post()
+                    .uri("/v2/user/me")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(KakaoMemberEntity.class);
+
+            kakaoMemberEntity = kakaoMemberEntityMono
+                    .share()
+                    .block();
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            throw new KakaoAuthenticationException();
+        }
 
         return kakaoMemberEntity.getId();
     }

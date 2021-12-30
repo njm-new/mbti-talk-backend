@@ -1,6 +1,7 @@
 package com.mbtitalkbackend.member.controller;
 
 import com.mbtitalkbackend.member.model.dto.MemberDTO;
+import com.mbtitalkbackend.member.model.vo.GetInfoResponseVO;
 import com.mbtitalkbackend.member.model.vo.LoginResponseVO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import com.mbtitalkbackend.member.service.MemberService;
@@ -8,6 +9,8 @@ import com.mbtitalkbackend.util.JsonWebToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequestMapping(value = "/api/member")
@@ -31,27 +34,49 @@ public class MemberController {
         } catch (KakaoAuthenticationException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         String jwt = jsonWebToken.create(member.getMemberId());
 
         return new ResponseEntity<>(new LoginResponseVO(jwt, member), HttpStatus.OK);
     }
 
+    @PostMapping(value = "/mbti")
+    public ResponseEntity<?> updateMemberMbti(@RequestHeader("Authorization") String jwt,
+                                              @RequestBody HashMap<String, String> payload) {
+        int memberId = (int) jsonWebToken.validate(jwt).get("memberId");
+        String mbti = payload.get("mbti");
+
+        memberService.update(memberId, mbti);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //Update member info
     @PatchMapping(value = "/change")
-    public ResponseEntity<?> update(@RequestBody MemberDTO member) {
+    public ResponseEntity<?> updateMemberInfo(@RequestBody MemberDTO member) {
         memberService.update(member);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //Check nickname override
     @GetMapping(value = "/nickname/{nickname}")
-    public ResponseEntity<?> checkNickname(@PathVariable("nickname") String nickname) {
-        if(memberService.existNickname(nickname)){
-            System.out.println("tlqkf");
+    public ResponseEntity<?> checkNickname(@RequestHeader("Authorization") String jwt, @PathVariable("nickname") String nickname) {
+        int memberId = (int) jsonWebToken.validate(jwt).get("memberId");
+
+        //If nickname is exist in DB
+        if (memberService.existNickname(memberId, nickname)) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        System.out.println("not tlqkf");
+        memberService.updateNickname(memberId, nickname);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/info/{memberId}")
+    public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String jwt, @PathVariable("memberId") int memberId) {
+        MemberDTO member = memberService.getInfo(memberId);
+
+        if (member == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new GetInfoResponseVO(member), HttpStatus.OK);
     }
 }

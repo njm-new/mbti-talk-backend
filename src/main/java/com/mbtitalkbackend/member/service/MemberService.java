@@ -48,8 +48,20 @@ public class MemberService {
         return member;
     }
 
+    public MemberDTO getInfo(int memberId) {
+        return memberRepository.getMemberInfo(memberId);
+    }
+
     public boolean update(MemberDTO memberDTO) {
         return memberRepository.update(memberDTO);
+    }
+
+    public boolean update(int memberId, String mbti) {
+        return memberRepository.updateMbti(memberId, mbti);
+    }
+
+    public boolean updateNickname(int memberId, String nickname) {
+        return memberRepository.updateMbti(memberId, nickname);
     }
 
     public boolean existNickname(String nickname) {
@@ -57,6 +69,13 @@ public class MemberService {
             return true;
         }
         return memberRepository.existNickname(nickname);
+    }
+
+    public boolean existNickname(int memberId, String nickname) {
+        if (nickname == null) {
+            return true;
+        }
+        return memberRepository.existNickname(memberId, nickname);
     }
 
     private String createNickName() {
