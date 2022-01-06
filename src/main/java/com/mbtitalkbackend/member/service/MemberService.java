@@ -61,14 +61,7 @@ public class MemberService {
     }
 
     public boolean updateNickname(int memberId, String nickname) {
-        return memberRepository.updateMbti(memberId, nickname);
-    }
-
-    public boolean existNickname(String nickname) {
-        if (nickname == null) {
-            return true;
-        }
-        return memberRepository.existNickname(nickname);
+        return memberRepository.updateNickname(memberId, nickname);
     }
 
     public boolean existNickname(int memberId, String nickname) {
