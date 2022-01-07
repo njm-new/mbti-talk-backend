@@ -26,4 +26,7 @@ public interface CommentMapper {
 
     @Update("UPDATE comment SET modifiedTime = now() WHERE commentId = #{commentId}")
     Integer updateCommentModifiedTime(long commentId);
+
+    @Select("SELECT COUNT(*) FROM comment WHERE postId = #{postId}")
+    int countCommentByCommentId(long postId);
 }

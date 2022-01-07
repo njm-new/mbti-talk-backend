@@ -38,13 +38,16 @@ public class CommentService {
     public CommentListVO findCommentList(long postId) {
 
         List<CommentEntity> commentEntityList = commentMapper.findCommentList(postId);
+
+        int commentCount = commentMapper.countCommentByCommentId(postId);
+
         List<CommentVO> commentVOList = new ArrayList<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
             commentVOList.add(CommentVO.of(commentEntity));
         }
 
-        return CommentListVO.create(commentVOList);
+        return CommentListVO.create(commentCount, commentVOList);
     }
 
     public Integer updateComment(long commentId, CommentVO commentVO) {

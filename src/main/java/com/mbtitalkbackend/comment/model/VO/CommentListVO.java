@@ -13,12 +13,12 @@ public class CommentListVO {
     private int commentCount;
     private List<CommentVO> commentList;
 
-    private CommentListVO (List<CommentVO> commentVOList) {
-        this.commentCount = commentVOList.size();
+    private CommentListVO (int commentCount, List<CommentVO> commentVOList) {
+        this.commentCount = commentCount;
         this.commentList = commentVOList;
     }
 
-    public static CommentListVO create(List<CommentVO> commentList) {
-        return new CommentListVO(commentList);
+    public static CommentListVO create(int commentCount, List<CommentVO> commentList) {
+        return new CommentListVO(commentCount, commentList);
     }
 }
