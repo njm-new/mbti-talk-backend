@@ -11,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostVO {
 
+    private long postId;
     private String boardId;
     private String title;
     private String content;
@@ -26,6 +27,7 @@ public class PostVO {
     public static PostVO of(PostEntity postEntity /*, MemberEntity memberEntity*/) { //멤버 엔티티 추가 후 포스트에 벰버 정보 같이 담아 보내기용
         PostVO postVO = new PostVO();
 
+        postVO.postId = postEntity.getPostId();
         postVO.boardId = postEntity.getBoardId();
         postVO.title = postEntity.getTitle();
         postVO.content = postEntity.getContent();
