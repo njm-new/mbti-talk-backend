@@ -52,6 +52,11 @@ public class MemberController {
     //Update member info
     @PatchMapping(value = "/change")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MemberDTO member) {
+        //If nickname is exist in DB
+        if (memberService.existNickname(member.getMemberId(), member.getNickname())) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        
         memberService.update(member);
         return new ResponseEntity<>(HttpStatus.OK);
     }
