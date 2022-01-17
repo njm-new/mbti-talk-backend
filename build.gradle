@@ -40,6 +40,9 @@ dependencies {
 
     /** WebClient */
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    /** AOP */
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 test {
