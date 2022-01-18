@@ -4,6 +4,8 @@ import com.mbtitalkbackend.comment.mapper.CommentMapper;
 import com.mbtitalkbackend.comment.model.VO.CommentListVO;
 import com.mbtitalkbackend.comment.model.VO.CommentVO;
 import com.mbtitalkbackend.comment.model.entity.CommentEntity;
+import com.mbtitalkbackend.member.mapper.MemberMapper;
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentMapper commentMapper;
+    private final MemberMapper memberMapper;
 
     public Integer createComment(CommentVO commentVO) {
 
@@ -27,8 +30,9 @@ public class CommentService {
 
         try {
             CommentEntity commentEntity = commentMapper.findCommentByCommentId(commentId);
+            MemberEntity memberEntity = memberMapper.findMemberById((int) commentEntity.getMemberId());
 
-            return CommentVO.of(commentEntity);
+            return CommentVO.of(commentEntity, memberEntity);
         }
         catch (NullPointerException e) {
             throw new NullPointerException();
@@ -44,7 +48,9 @@ public class CommentService {
         List<CommentVO> commentVOList = new ArrayList<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
-            commentVOList.add(CommentVO.of(commentEntity));
+            MemberEntity memberEntity = memberMapper.findMemberById((int) commentEntity.getMemberId());
+
+            commentVOList.add(CommentVO.of(commentEntity, memberEntity));
         }
 
         return CommentListVO.create(commentCount, commentVOList);

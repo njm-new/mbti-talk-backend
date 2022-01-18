@@ -1,6 +1,7 @@
 package com.mbtitalkbackend.comment.model.VO;
 
 import com.mbtitalkbackend.comment.model.entity.CommentEntity;
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class CommentVO {
     private String mbti;
     private String nickname;
 
-    public static CommentVO of(CommentEntity commentEntity /*, MemberEntity memberEntity*/) {
+    public static CommentVO of(CommentEntity commentEntity, MemberEntity memberEntity) {
         CommentVO commentVO = new CommentVO();
 
         commentVO.commentId = commentEntity.getCommentId();
@@ -33,9 +34,9 @@ public class CommentVO {
         commentVO.likeCount = commentEntity.getLikeCount();
         commentVO.createTime = commentEntity.getCreateTime();
 
-        commentVO.memberId = commentEntity.getMemberId();
-        //commentVO.mbti = commentEntity.getMbti();
-        //commentVO.nickname = commentEntity.getNickname();
+        commentVO.memberId = memberEntity.getMemberId();
+        commentVO.mbti = memberEntity.getMbti();
+        commentVO.nickname = memberEntity.getNickname();
 
         return commentVO;
     }
