@@ -8,17 +8,17 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CommentListVO {
+public class CommentVOList {
 
     private int commentCount;
     private List<CommentVO> commentList;
 
-    private CommentListVO (int commentCount, List<CommentVO> commentVOList) {
+    private CommentVOList(int commentCount, List<CommentVO> commentVOList) {
         this.commentCount = commentCount;
         this.commentList = commentVOList;
     }
 
-    public static CommentListVO create(int commentCount, List<CommentVO> commentList) {
-        return new CommentListVO(commentCount, commentList);
+    public static CommentVOList create(int commentCount, List<CommentVO> commentList) {
+        return new CommentVOList(commentCount, commentList);
     }
 }

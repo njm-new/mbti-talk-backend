@@ -1,6 +1,6 @@
 package com.mbtitalkbackend.comment.controller;
 
-import com.mbtitalkbackend.comment.model.VO.CommentListVO;
+import com.mbtitalkbackend.comment.model.VO.CommentVOList;
 import com.mbtitalkbackend.comment.model.VO.CommentVO;
 import com.mbtitalkbackend.comment.service.CommentService;
 import com.mbtitalkbackend.common.ApiResponse;
@@ -16,12 +16,11 @@ public class CommentController {
 
     private final CommentService commentService;
 
-
     @GetMapping
     public ResponseEntity<ApiResponse> getCommentList(@PathVariable long postId) {
-        CommentListVO commentListVO = commentService.findCommentList(postId);
+        CommentVOList commentVOList = commentService.findCommentList(postId);
 
-        return new ResponseEntity<>(ApiResponse.success(commentListVO), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(commentVOList), HttpStatus.OK);
     }
 
     @PostMapping

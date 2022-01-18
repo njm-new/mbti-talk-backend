@@ -1,7 +1,7 @@
 package com.mbtitalkbackend.comment.service;
 
 import com.mbtitalkbackend.comment.mapper.CommentMapper;
-import com.mbtitalkbackend.comment.model.VO.CommentListVO;
+import com.mbtitalkbackend.comment.model.VO.CommentVOList;
 import com.mbtitalkbackend.comment.model.VO.CommentVO;
 import com.mbtitalkbackend.comment.model.entity.CommentEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
@@ -39,21 +39,22 @@ public class CommentService {
         }
     }
 
-    public CommentListVO findCommentList(long postId) {
+    public CommentVOList findCommentList(long postId) {
 
         List<CommentEntity> commentEntityList = commentMapper.findCommentList(postId);
 
         int commentCount = commentMapper.countCommentByCommentId(postId);
+//        int commentCount = commentEntityList.size();
 
-        List<CommentVO> commentVOList = new ArrayList<>();
+        List<CommentVO> commentList = new ArrayList<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
             MemberEntity memberEntity = memberMapper.findMemberById((int) commentEntity.getMemberId());
 
-            commentVOList.add(CommentVO.of(commentEntity, memberEntity));
+            commentList.add(CommentVO.of(commentEntity, memberEntity));
         }
 
-        return CommentListVO.create(commentCount, commentVOList);
+        return CommentVOList.create(commentCount, commentList);
     }
 
     public Integer updateComment(long commentId, CommentVO commentVO) {

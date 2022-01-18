@@ -15,7 +15,6 @@ public class CommentVO {
     private long commentId;
     private long postId;
     private long recommentId;
-    private String title;
     private String content;
     private long likeCount;
     private Timestamp createTime;

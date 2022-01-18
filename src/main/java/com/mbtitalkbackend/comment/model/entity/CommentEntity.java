@@ -27,7 +27,6 @@ public class CommentEntity {
         this.commentId = commentVO.getCommentId();
         this.postId = commentVO.getPostId();
         this.memberId = commentVO.getMemberId();
-        this.title = commentVO.getTitle();
         this.content = commentVO.getContent();
         this.likeCount = likeCount;
     }
