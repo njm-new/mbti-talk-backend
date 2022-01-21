@@ -43,8 +43,7 @@ public class CommentService {
 
         List<CommentEntity> commentEntityList = commentMapper.findCommentList(postId);
 
-        int commentCount = commentMapper.countCommentByCommentId(postId);
-//        int commentCount = commentEntityList.size();
+        int commentCount = commentEntityList.size();
 
         List<CommentVO> commentList = new ArrayList<>();
 
