@@ -2,6 +2,9 @@ package com.mbtitalkbackend.board.service;
 
 import com.mbtitalkbackend.board.mapper.BoardMapper;
 import com.mbtitalkbackend.board.model.PagingCriteria;
+import com.mbtitalkbackend.board.model.VO.BoardVO;
+import com.mbtitalkbackend.comment.mapper.CommentMapper;
+import com.mbtitalkbackend.comment.model.entity.CommentEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
@@ -18,37 +21,49 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
     private final MemberMapper memberMapper;
+    private final CommentMapper commentMapper;
 
     public List<PostEntity> listAllPosts() {
 
         return boardMapper.findAllPosts();
     }
 
-    public List<PostVO> listAllPostsWithPaging(PagingCriteria pagingCriteria) {
+    public List<BoardVO> listAllPostsWithPaging(PagingCriteria pagingCriteria) {
 
         List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(pagingCriteria);
 
-        List<PostVO> postVOList = new ArrayList<>();
-
-        for (PostEntity postEntity : postEntityList) {
-            MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
-            postVOList.add(PostVO.of(postEntity, memberEntity));
-        }
-
-        return postVOList;
+        return generateList(postEntityList);
     }
 
-    public List<PostVO> listAllPostsWithMBTI(PagingCriteria pagingCriteria, String mbti) {
+    public List<BoardVO> listAllPostsWithMBTI(PagingCriteria pagingCriteria, String mbti) {
 
         List<PostEntity> postEntityList = boardMapper.findAllPostsWithMBTI(pagingCriteria, mbti);
 
-        List<PostVO> postVOList = new ArrayList<>();
+        return generateList(postEntityList);
+    }
+
+    public List<BoardVO> listPosts(PagingCriteria pagingCriteria) {
+        List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(pagingCriteria);
+
+        return generateList(postEntityList);
+    }
+
+    public List<BoardVO> listPosts(PagingCriteria pagingCriteria, String mbti) {
+        List<PostEntity> postEntityList = boardMapper.findAllPostsWithMBTI(pagingCriteria, mbti);
+
+        return generateList(postEntityList);
+    }
+
+    public List<BoardVO> generateList(List<PostEntity> postEntityList) {
+
+        List<BoardVO> boardVOList = new ArrayList<>();
 
         for (PostEntity postEntity : postEntityList) {
             MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
-            postVOList.add(PostVO.of(postEntity, memberEntity));
+            int commentCount = commentMapper.countCommentByCommentId(postEntity.getPostId());
+            boardVOList.add(BoardVO.of(postEntity, memberEntity, commentCount));
         }
 
-        return postVOList;
+        return boardVOList;
     }
 }

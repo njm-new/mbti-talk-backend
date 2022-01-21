@@ -1,6 +1,7 @@
 package com.mbtitalkbackend.board.controller;
 
 import com.mbtitalkbackend.board.model.PagingCriteria;
+import com.mbtitalkbackend.board.model.VO.BoardVO;
 import com.mbtitalkbackend.board.service.BoardService;
 import com.mbtitalkbackend.common.ApiResponse;
 import com.mbtitalkbackend.post.model.VO.PostVO;
@@ -21,7 +22,9 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<ApiResponse> listAllPost(@RequestBody PagingCriteria pagingCriteria) {
 
-        List<PostVO> postEntityList = boardService.listAllPostsWithPaging(pagingCriteria);
+//        List<BoardVO> postEntityList = boardService.listAllPostsWithPaging(pagingCriteria);
+        List<BoardVO> postEntityList = boardService.listPosts(pagingCriteria);
+
 
         return new ResponseEntity<>(ApiResponse.success(postEntityList), HttpStatus.OK);
     }
@@ -31,7 +34,9 @@ public class BoardController {
 
         pagingCriteria.setRowPerPage(12);
 
-        List<PostVO> postEntityList = boardService.listAllPostsWithMBTI(pagingCriteria, mbti);
+//        List<BoardVO> postEntityList = boardService.listAllPostsWithMBTI(pagingCriteria, mbti);
+        List<BoardVO> postEntityList = boardService.listPosts(pagingCriteria, mbti);
+
 
         return new ResponseEntity<>(ApiResponse.success(postEntityList), HttpStatus.OK);
     }
