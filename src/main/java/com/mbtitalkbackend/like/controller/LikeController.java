@@ -18,16 +18,25 @@ public class LikeController {
     @PostMapping("/like")
     public ResponseEntity<ApiResponse> hitLike(@PathVariable long postId, @RequestBody LikeEntity likeEntity) {
 
-        likeService.hitLike(likeEntity);
+        try {
+            likeService.hitLike(likeEntity);
+            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.fail("잘못된 요청입니다."), HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
     @DeleteMapping("/like")
     public ResponseEntity<ApiResponse> cancelLike(@PathVariable long postId, @RequestBody LikeEntity likeEntity) {
 
-        likeService.cancelLike(likeEntity);
+        try {
+            likeService.cancelLike(likeEntity);
 
-        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ApiResponse.fail("잘못된 요청입니다."), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
