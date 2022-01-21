@@ -11,18 +11,25 @@ public class LikeService {
 
     private final LikeMapper likeMapper;
 
-    public Integer hitLike(LikeEntity likeEntity) {
-        likeMapper.increaseLikeCount(likeEntity.getPostId());
-        return likeMapper.createLike(likeEntity);
+    public void hitLike(LikeEntity likeEntity) throws Exception {
+
+        if(isLike(likeEntity)) {
+            throw new Exception();
+        } else {
+            likeMapper.createLike(likeEntity);
+            likeMapper.increaseLikeCount(likeEntity.getPostId());
+        }
     }
 
-    public Integer cancelLike(LikeEntity likeEntity) {
-        likeMapper.decreaseLikeCount(likeEntity.getPostId());
-        return likeMapper.deleteLike(likeEntity);
+    public void cancelLike(LikeEntity likeEntity) throws Exception {
+
+        if(likeMapper.deleteLike(likeEntity) == 1)
+            likeMapper.decreaseLikeCount(likeEntity.getPostId());
+        else
+            throw new Exception();
     }
 
     public boolean isLike(LikeEntity likeEntity) {
-
         return likeMapper.findLike(likeEntity) != null;
     }
 }

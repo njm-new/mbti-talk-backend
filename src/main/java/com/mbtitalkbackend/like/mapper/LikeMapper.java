@@ -6,14 +6,14 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface LikeMapper {
 
-    @Insert("INSERT INTO like (postId, userId) VALUES(#{postId}, #{userId})")
+    @Insert("INSERT INTO likeT (postId, memberId) VALUES(#{postId}, #{memberId})")
     @Options(useGeneratedKeys = true, keyProperty = "likeId")
     Integer createLike(LikeEntity likeEntity);
 
-    @Delete("DELETE FROM like WHERE postId = #{postId} AND userId = #{userId}")
+    @Delete("DELETE FROM likeT WHERE postId = #{postId} AND memberId = #{memberId}")
     Integer deleteLike(LikeEntity likeEntity);
 
-    @Select("SELECT * FROM like WHERE postId = #{postId} AND userId = #{userId}")
+    @Select("SELECT * FROM likeT WHERE postId = #{postId} AND memberId = #{memberId}")
     LikeEntity findLike(LikeEntity likeEntity);
 
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) + 1 WHERE postId = #{postId}")
