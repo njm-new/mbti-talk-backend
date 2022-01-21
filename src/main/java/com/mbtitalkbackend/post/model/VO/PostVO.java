@@ -1,5 +1,6 @@
 package com.mbtitalkbackend.post.model.VO;
 
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class PostVO {
     private String mbti;
     private String nickname;
 
-    public static PostVO of(PostEntity postEntity /*, MemberEntity memberEntity*/) { //멤버 엔티티 추가 후 포스트에 벰버 정보 같이 담아 보내기용
+    public static PostVO of(PostEntity postEntity, MemberEntity memberEntity) { //멤버 엔티티 추가 후 포스트에 벰버 정보 같이 담아 보내기용
         PostVO postVO = new PostVO();
 
         postVO.postId = postEntity.getPostId();
@@ -36,8 +37,8 @@ public class PostVO {
         postVO.createTime = postEntity.getCreateTime();
 
         postVO.memberId = postEntity.getMemberId();
-        //postVO.mbti = memberEntity.getMbti();
-        //postVO.nickname = memberEntity.getNickname;
+        postVO.mbti = memberEntity.getMbti();
+        postVO.nickname = memberEntity.getNickname();
 
         return postVO;
     }
