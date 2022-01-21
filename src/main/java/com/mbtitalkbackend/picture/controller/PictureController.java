@@ -1,6 +1,7 @@
 package com.mbtitalkbackend.picture.controller;
 
 import com.mbtitalkbackend.common.ApiResponse;
+import com.mbtitalkbackend.picture.model.VO.ImageVO;
 import com.mbtitalkbackend.picture.model.VO.ImageVOList;
 import com.mbtitalkbackend.picture.model.VO.ImageInfoVO;
 import com.mbtitalkbackend.picture.service.PictureService;
@@ -42,8 +43,8 @@ public class PictureController {
 
     // 개별 업로드용
     @PostMapping("/image")
-    public ResponseEntity<ApiResponse> uploadImage(@PathVariable long postId, @RequestPart String comment, @RequestPart MultipartFile file) {
-        List<String> pictureUrlList = pictureService.uploadImage(postId, comment, file);
-        return new ResponseEntity<>(ApiResponse.success(pictureUrlList), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> uploadImage(@PathVariable long postId, @ModelAttribute ImageVO imageVO) {
+        ImageInfoVO imageInfoVO = pictureService.uploadImage(postId, imageVO);
+        return new ResponseEntity<>(ApiResponse.success(imageInfoVO), HttpStatus.OK);
     }
 }
