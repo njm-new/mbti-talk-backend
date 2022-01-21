@@ -2,6 +2,8 @@ package com.mbtitalkbackend.board.service;
 
 import com.mbtitalkbackend.board.mapper.BoardMapper;
 import com.mbtitalkbackend.board.model.PagingCriteria;
+import com.mbtitalkbackend.member.mapper.MemberMapper;
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import com.mbtitalkbackend.post.model.VO.PostVO;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardMapper boardMapper;
+    private final MemberMapper memberMapper;
 
     public List<PostEntity> listAllPosts() {
 
@@ -28,7 +31,8 @@ public class BoardService {
         List<PostVO> postVOList = new ArrayList<>();
 
         for (PostEntity postEntity : postEntityList) {
-            postVOList.add(PostVO.of(postEntity));
+            MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
+            postVOList.add(PostVO.of(postEntity, memberEntity));
         }
 
         return postVOList;
@@ -41,7 +45,8 @@ public class BoardService {
         List<PostVO> postVOList = new ArrayList<>();
 
         for (PostEntity postEntity : postEntityList) {
-            postVOList.add(PostVO.of(postEntity));
+            MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
+            postVOList.add(PostVO.of(postEntity, memberEntity));
         }
 
         return postVOList;
