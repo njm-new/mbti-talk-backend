@@ -22,8 +22,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterAnnotation(MemberInfo.class) != null
-                && parameter.getParameterType().equals(Member.class);
+        return  parameter.getParameterType().equals(Member.class);
     }
 
     @Override
@@ -55,6 +54,6 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             throw new JwtValidationException();
         }
 
-        return Member.from(memberRepository.getMemberInfo(memberId));
+        return com.mbtitalkbackend.member.model.vo.Member.from(memberRepository.getMemberInfo(memberId));
     }
 }
