@@ -1,5 +1,7 @@
 package com.mbtitalkbackend.post.service;
 
+import com.mbtitalkbackend.member.mapper.MemberMapper;
+import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.mapper.PostMapper;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import com.mbtitalkbackend.post.model.VO.PostVO;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class PostService {
 
     private final PostMapper postMapper;
+    private final MemberMapper memberMapper;
 
     public PostVO findPostEntityById(long postId) {
 
@@ -18,8 +21,9 @@ public class PostService {
             postMapper.increaseViewCount(postId);
 
             PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
+            MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
 
-            return PostVO.of(postEntity);
+            return PostVO.of(postEntity, memberEntity);
         }
         catch (NullPointerException e) {
             throw new NullPointerException();

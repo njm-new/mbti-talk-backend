@@ -1,4 +1,4 @@
-package com.mbtitalkbackend.util;
+package com.mbtitalkbackend.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;

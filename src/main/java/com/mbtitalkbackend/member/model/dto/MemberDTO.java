@@ -1,13 +1,11 @@
 package com.mbtitalkbackend.member.model.dto;
 
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberDTO {
     private int memberId;
