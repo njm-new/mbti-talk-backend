@@ -3,6 +3,8 @@ package com.mbtitalkbackend.like.mapper;
 import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface LikeMapper {
 
@@ -21,4 +23,7 @@ public interface LikeMapper {
 
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) - 1 WHERE postId = #{postId}")
     void decreaseLikeCount(long postId);
+
+    @Select("SELECT * FROM likeT WHERE memberId = #{memberId}")
+    List<LikeEntity> findLikeByMemberId(int memberId);
 }
