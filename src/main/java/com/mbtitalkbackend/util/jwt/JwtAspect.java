@@ -39,7 +39,7 @@ public class JwtAspect {
                     .parseClaimsJws(token)
                     .getBody();
 
-        } catch (NullPointerException | SignatureException | ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             throw new JwtValidationException();
         }
     }
