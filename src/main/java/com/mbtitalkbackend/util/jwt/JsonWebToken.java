@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.util.Date;
 
-@Component
 public class JsonWebToken {
-    private static final String SALT = "njm-mbti";
+    public static final String SALT = "njm-mbti";
 
     public String create(int memberId) {
         //Set issue time
