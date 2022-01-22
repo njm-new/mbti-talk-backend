@@ -56,7 +56,8 @@ public class BoardController {
 
     @GetMapping("/myLike")
     public ResponseEntity<ApiResponse> listMyLikePosts(@RequestBody RequestVO requestVO) {
-        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+        List<BoardVO> boardVOList = boardService.listLikePosts(requestVO);
+        return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
     @GetMapping("/hot")

@@ -6,6 +6,8 @@ import com.mbtitalkbackend.board.model.VO.BoardVO;
 import com.mbtitalkbackend.board.model.VO.RequestVO;
 import com.mbtitalkbackend.comment.mapper.CommentMapper;
 import com.mbtitalkbackend.comment.model.entity.CommentEntity;
+import com.mbtitalkbackend.like.mapper.LikeMapper;
+import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.mapper.PostMapper;
@@ -25,6 +27,7 @@ public class BoardService {
     private final MemberMapper memberMapper;
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
+    private final LikeMapper likeMapper;
 
     public List<PostEntity> listAllPosts() {
 
@@ -94,6 +97,17 @@ public class BoardService {
 
         for (Long postId : linkedHashSet) {
             postEntityList.add(postMapper.findPostEntityByPostId(postId));
+        }
+
+        return generateList(postEntityList);
+    }
+
+    public List<BoardVO> listLikePosts(RequestVO requestVO) {
+        List<LikeEntity> likeEntityList = likeMapper.findLikeByMemberId(requestVO.getMemberId());
+        List<PostEntity> postEntityList = new ArrayList<>();
+
+        for (LikeEntity likeEntity : likeEntityList) {
+            postEntityList.add(postMapper.findPostEntityByPostId(likeEntity.getPostId()));
         }
 
         return generateList(postEntityList);
