@@ -1,17 +1,15 @@
-package com.mbtitalkbackend.util.jwt;
+package com.mbtitalkbackend.util.authrization;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Date;
 
-@Component
-public class JsonWebToken {
-    private static final String SALT = "njm-mbti";
+public class AccessToken {
+    public static final String SALT = "njm-mbti";
 
     public String create(int memberId) {
         //Set issue time

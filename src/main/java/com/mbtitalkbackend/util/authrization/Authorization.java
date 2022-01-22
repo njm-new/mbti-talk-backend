@@ -1,4 +1,4 @@
-package com.mbtitalkbackend.util.jwt;
+package com.mbtitalkbackend.util.authrization;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JwtValidation {
+public @interface Authorization {
 }
