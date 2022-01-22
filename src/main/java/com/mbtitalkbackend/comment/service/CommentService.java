@@ -41,7 +41,7 @@ public class CommentService {
 
     public CommentVOList findCommentList(long postId) {
 
-        List<CommentEntity> commentEntityList = commentMapper.findCommentList(postId);
+        List<CommentEntity> commentEntityList = commentMapper.findCommentListByPostId(postId);
 
         int commentCount = commentEntityList.size();
 

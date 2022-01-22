@@ -18,4 +18,10 @@ public interface BoardMapper {
 
     @Select("SELECT * FROM post WHERE boardId = #{mbti} AND postId BETWEEN (#{pagingCriteria.pageNum} - 1) * #{pagingCriteria.rowPerPage} AND #{pagingCriteria.pageNum} * #{pagingCriteria.rowPerPage}")
     List<PostEntity> findAllPostsWithMBTI(PagingCriteria pagingCriteria, String mbti);
+
+    @Select("SELECT * FROM post WHERE memberId = #{memberId} AND postId BETWEEN (#{pagingCriteria.pageNum} - 1) * #{pagingCriteria.rowPerPage} AND #{pagingCriteria.pageNum} * #{pagingCriteria.rowPerPage}")
+    List<PostEntity> findMyPosts(PagingCriteria pagingCriteria, long memberId);
+
+    @Select("SELECT * FROM post WHERE postId BETWEEN (#{pageNum} - 1) * #{rowPerPage} AND #{pageNum} * #{rowPerPage} ORDER BY likeCount")
+    List<PostEntity> findHotPosts(PagingCriteria pagingCriteria);
 }
