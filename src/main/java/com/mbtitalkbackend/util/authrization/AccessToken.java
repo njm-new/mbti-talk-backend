@@ -1,15 +1,14 @@
-package com.mbtitalkbackend.util.jwt;
+package com.mbtitalkbackend.util.authrization;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Date;
 
-public class JsonWebToken {
+public class AccessToken {
     public static final String SALT = "njm-mbti";
 
     public String create(int memberId) {
@@ -20,7 +19,8 @@ public class JsonWebToken {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuedAt(now)
-                .setExpiration(new Date((now.getTime() + Duration.ofDays(1).toMillis())))
+//                .setExpiration(new Date((now.getTime() + Duration.ofDays(1).toMillis())))
+                .setExpiration(new Date((now.getTime() + Duration.ofMillis(10000).toMillis())))
 
                 .claim("memberId", memberId)
                 .signWith(SignatureAlgorithm.HS256, SALT)

@@ -1,7 +1,11 @@
-package com.mbtitalkbackend.util.jwt;
+package com.mbtitalkbackend.resolver;
 
 import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.member.repository.MemberRepository;
+import com.mbtitalkbackend.util.authrization.AccessToken;
+import com.mbtitalkbackend.util.authrization.AuthorizationException;
+import com.mbtitalkbackend.util.authrization.ExpiredAccessTokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -35,25 +39,26 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
         int memberId;
 
         try {
-
             //Validate Authorization Header
             if (!token.toLowerCase().startsWith(tokenHeader)) {
-                throw new JwtValidationException();
+                throw new AuthorizationException();
             }
 
             token = token.substring(tokenHeader.length());
 
             memberId = (int) Jwts
                     .parser()
-                    .setSigningKey(JsonWebToken.SALT)
+                    .setSigningKey(AccessToken.SALT)
                     .parseClaimsJws(token)
                     .getBody()
                     .get("memberId");
 
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredAccessTokenException();
         } catch (Exception e) {
-            throw new JwtValidationException();
+            throw new AuthorizationException();
         }
 
-        return com.mbtitalkbackend.member.model.vo.Member.from(memberRepository.getMemberInfo(memberId));
+        return Member.from(memberRepository.getMemberInfo(memberId));
     }
 }

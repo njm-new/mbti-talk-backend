@@ -1,41 +1,40 @@
-package com.mbtitalkbackend.util.jwt;
+package com.mbtitalkbackend.util.authrization;
 
 import io.jsonwebtoken.*;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Aspect
-public class JwtAspect {
-    @Before("@annotation(com.mbtitalkbackend.util.jwt.JwtValidation)")
+public class AuthorizationAspect {
+    @Before("@annotation(com.mbtitalkbackend.util.authrization.Authorization)")
     public void validate() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
 
         String tokenHeader = "bearer ";
         String token = request.getHeader("Authorization");
-
         try {
-
             //Validate Authorization Header
             if (!token.toLowerCase().startsWith(tokenHeader)) {
-                throw new JwtValidationException();
+                throw new AuthorizationException();
             }
 
             token = token.substring(tokenHeader.length());
 
             Jwts
                     .parser()
-                    .setSigningKey(JsonWebToken.SALT)
+                    .setSigningKey(AccessToken.SALT)
                     .parseClaimsJws(token)
                     .getBody();
 
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredAccessTokenException();
         } catch (Exception e) {
-            throw new JwtValidationException();
+            throw new AuthorizationException();
         }
     }
 }
