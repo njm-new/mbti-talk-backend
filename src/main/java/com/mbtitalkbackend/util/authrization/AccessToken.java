@@ -19,8 +19,7 @@ public class AccessToken {
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuedAt(now)
-//                .setExpiration(new Date((now.getTime() + Duration.ofDays(1).toMillis())))
-                .setExpiration(new Date((now.getTime() + Duration.ofMillis(10000).toMillis())))
+                .setExpiration(new Date((now.getTime() + Duration.ofDays(1).toMillis())))
 
                 .claim("memberId", memberId)
                 .signWith(SignatureAlgorithm.HS256, SALT)
