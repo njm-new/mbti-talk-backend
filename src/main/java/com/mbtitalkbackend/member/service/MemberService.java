@@ -7,6 +7,7 @@ import com.mbtitalkbackend.member.model.dto.MemberDTO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
 import com.mbtitalkbackend.member.repository.MemberRepository;
+import com.mbtitalkbackend.util.authrization.AccessToken;
 import com.mbtitalkbackend.util.authrization.AuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
-
-import static com.mbtitalkbackend.util.authrization.AccessToken.SALT;
 
 @Service
 @Slf4j
@@ -97,7 +96,7 @@ public class MemberService {
         try {
             claims = Jwts
                     .parser()
-                    .setSigningKey(SALT)
+                    .setSigningKey(AccessToken.SALT)
                     .parseClaimsJws(tokenString)
                     .getBody();
         } catch (ExpiredJwtException e) {
