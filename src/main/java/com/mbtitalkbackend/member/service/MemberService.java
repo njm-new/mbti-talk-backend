@@ -7,10 +7,16 @@ import com.mbtitalkbackend.member.model.dto.MemberDTO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
 import com.mbtitalkbackend.member.repository.MemberRepository;
+import com.mbtitalkbackend.util.authrization.AuthorizationException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+
+import static com.mbtitalkbackend.util.authrization.AccessToken.SALT;
 
 @Service
 @Slf4j
@@ -73,6 +79,34 @@ public class MemberService {
             return true;
         }
         return memberRepository.existNickname(memberId, nickname);
+    }
+
+    public int getMemberIdFromAccessToken(String accessToken) {
+        String tokenHeader = "Bearer";
+
+        //Validate Authorization Header
+        if (accessToken == null || !accessToken.startsWith(tokenHeader)) {
+            throw new IllegalStateException();
+        }
+
+        //Get token string
+        String tokenString = accessToken.substring(tokenHeader.length());
+        Claims claims;
+
+        //Get token Claim
+        try {
+            claims = Jwts
+                    .parser()
+                    .setSigningKey(SALT)
+                    .parseClaimsJws(tokenString)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            return (int) e.getClaims().get("memberId");
+        } catch (Exception e){
+            throw new AuthorizationException();
+        }
+
+        return (int) claims.get("memberId");
     }
 
     private String createNickName() {

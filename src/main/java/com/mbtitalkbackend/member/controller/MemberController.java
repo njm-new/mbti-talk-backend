@@ -6,6 +6,7 @@ import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
 import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.member.model.vo.LoginResponseVO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
+import com.mbtitalkbackend.member.model.vo.RefreshTokenVO;
 import com.mbtitalkbackend.member.service.MemberService;
 import com.mbtitalkbackend.util.authrization.AccessToken;
 import com.mbtitalkbackend.util.authrization.Authorization;
@@ -84,4 +85,13 @@ public class MemberController {
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
+    //Refresh access token
+    @GetMapping(value = "/{memberId}/access-token")
+    public ResponseEntity<ApiResponse> refreshAccessToken(@RequestHeader("Authorization") String token, @PathVariable("memberId") int memberId) {
+        //토큰의 memberId가 요청한 memberId 같으면 refresh
+        if (memberService.getMemberIdFromAccessToken(token) != memberId) {
+            return new ResponseEntity<>(ApiResponse.fail("요청자 정보가 토큰과 불일치합니다."), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(ApiResponse.success(RefreshTokenVO.from(accessToken.create(memberId))), HttpStatus.OK);
+    }
 }
