@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -14,10 +14,17 @@ public class MemberEntity {
     private String nickname;
     private String mbti;
     private String content;
-    private Date createTime;
-    private Date modifiedTime;
+    private Timestamp createTime;
+    private Timestamp modifiedTime;
 
-    public static MemberEntity of(MemberDTO member, Date createTime, Date modifiedTime) {
-        return new MemberEntity(member.getMemberId(), member.getNickname(), member.getMbti(), member.getContent(), createTime, modifiedTime);
+    private MemberEntity(int memberId, String nickname, String mbti, String content) {
+        this.memberId = memberId;
+        this.nickname = nickname;
+        this.mbti = mbti;
+        this.content = content;
+    }
+
+    public static MemberEntity from(MemberDTO member) {
+        return new MemberEntity(member.getMemberId(), member.getNickname(), member.getMbti(), member.getContent());
     }
 }

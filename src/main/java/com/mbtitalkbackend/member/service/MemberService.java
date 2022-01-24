@@ -2,36 +2,47 @@ package com.mbtitalkbackend.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mbtitalkbackend.client.kakao.KakaoClient;
+import com.mbtitalkbackend.common.SnsType;
 import com.mbtitalkbackend.member.model.dto.MemberDTO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
+import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
 import com.mbtitalkbackend.member.repository.MemberRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
+@Slf4j
 public class MemberService {
     private final KakaoClient kakaoClient;
     private final MemberRepository memberRepository;
-    private final Logger logger = LoggerFactory.getLogger(MemberService.class);
 
     public MemberService(KakaoClient kakaoClient, MemberRepository memberRepository) {
         this.kakaoClient = kakaoClient;
         this.memberRepository = memberRepository;
     }
 
-    public MemberDTO login(String kakaoCode) {
-        //Authenticate user from Kakao
+    public MemberDTO login(LoginRequestVO loginRequestVO) throws IllegalAccessException {
         int memberId;
+        String snsType = loginRequestVO.getSnsType();
+        String snsCode = loginRequestVO.getSnsCode();
 
-        try {
-            String kakaoAccessToken = kakaoClient.getAccessToken(kakaoCode);
-            memberId = kakaoClient.getMemberId(kakaoAccessToken);
-        } catch (JsonProcessingException e) {
-            logger.error(e.getMessage());
-            throw new KakaoAuthenticationException();
+        switch (SnsType.compare(snsType)) {
+            case KAKAO:
+                try {
+                    //Authenticate user from Kakao
+                    String kakaoAccessToken = kakaoClient.getAccessToken(snsCode);
+                    memberId = kakaoClient.getMemberId(kakaoAccessToken);
+                } catch (JsonProcessingException e) {
+                    log.error(e.getMessage());
+                    throw new KakaoAuthenticationException();
+                }
+                break;
+
+            default:
+                log.error(snsType);
+                throw new IllegalAccessException();
         }
         //Check user
         MemberDTO member = memberRepository.getMemberInfo(memberId);
@@ -43,25 +54,18 @@ public class MemberService {
 
             //Insert member data into DB
             member = MemberDTO.of(memberId, memberNickname);
-            memberRepository.signUp(member);
+            memberRepository.register(member);
         }
         return member;
     }
+
 
     public MemberDTO getInfo(int memberId) {
         return memberRepository.getMemberInfo(memberId);
     }
 
-    public boolean update(MemberDTO memberDTO) {
-        return memberRepository.update(memberDTO);
-    }
-
-    public boolean update(int memberId, String mbti) {
-        return memberRepository.updateMbti(memberId, mbti);
-    }
-
-    public boolean updateNickname(int memberId, String nickname) {
-        return memberRepository.updateNickname(memberId, nickname);
+    public void update(MemberDTO memberDTO) {
+        memberRepository.update(memberDTO);
     }
 
     public boolean existNickname(int memberId, String nickname) {
