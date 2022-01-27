@@ -8,7 +8,7 @@ import com.mbtitalkbackend.member.model.vo.LoginResponseVO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import com.mbtitalkbackend.member.model.vo.RefreshTokenVO;
 import com.mbtitalkbackend.member.service.MemberService;
-import com.mbtitalkbackend.util.authrization.AccessToken;
+import com.mbtitalkbackend.util.authrization.AccessTokenManager;
 import com.mbtitalkbackend.util.authrization.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/members")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MemberController {
-    private final AccessToken accessToken;
+    private final AccessTokenManager accessTokenManager;
     private final MemberService memberService;
 
-    public MemberController(AccessToken accessToken, MemberService memberService) {
-        this.accessToken = accessToken;
+    public MemberController(AccessTokenManager accessTokenManager, MemberService memberService) {
+        this.accessTokenManager = accessTokenManager;
         this.memberService = memberService;
     }
 
@@ -39,7 +39,7 @@ public class MemberController {
             return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
-        String jwt = accessToken.create(member.getMemberId());
+        String jwt = accessTokenManager.create(member.getMemberId());
 
         return new ResponseEntity<>(ApiResponse.success(LoginResponseVO.of(jwt, member)), HttpStatus.OK);
     }
@@ -61,7 +61,7 @@ public class MemberController {
     @PatchMapping(value = "/{memberId}")
     public ResponseEntity<ApiResponse> updateMemberInfo(Member member, @RequestBody MemberDTO memberDto, @PathVariable("memberId") int memberId) {
         //본인 검증
-        if (memberId != member.getMemberId() || member.getMemberId() != memberDto.getMemberId()) {
+        if (!memberService.checkAuth(memberId, member.getMemberId()) || !memberService.checkAuth(memberId, memberDto.getMemberId())) {
             return new ResponseEntity<>(ApiResponse.fail("자신의 정보만 수정할 수 있습니다."), HttpStatus.FORBIDDEN);
         }
 
@@ -89,9 +89,9 @@ public class MemberController {
     @GetMapping(value = "/{memberId}/access-token")
     public ResponseEntity<ApiResponse> refreshAccessToken(@RequestHeader("Authorization") String token, @PathVariable("memberId") int memberId) {
         //토큰의 memberId가 요청한 memberId 같으면 refresh
-        if (memberService.getMemberIdFromAccessToken(token) != memberId) {
+        if (!memberService.checkAuth(memberService.getMemberIdFromAccessToken(token), memberId)) {
             return new ResponseEntity<>(ApiResponse.fail("요청자 정보가 토큰과 불일치합니다."), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(ApiResponse.success(RefreshTokenVO.from(accessToken.create(memberId))), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(RefreshTokenVO.from(accessTokenManager.create(memberId))), HttpStatus.OK);
     }
 }

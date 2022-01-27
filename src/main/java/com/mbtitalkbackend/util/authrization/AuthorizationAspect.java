@@ -27,7 +27,7 @@ public class AuthorizationAspect {
 
             Jwts
                     .parser()
-                    .setSigningKey(AccessToken.SALT)
+                    .setSigningKey(AccessTokenManager.SALT)
                     .parseClaimsJws(token)
                     .getBody();
 

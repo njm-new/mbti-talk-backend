@@ -7,7 +7,7 @@ import com.mbtitalkbackend.member.model.dto.MemberDTO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
 import com.mbtitalkbackend.member.repository.MemberRepository;
-import com.mbtitalkbackend.util.authrization.AccessToken;
+import com.mbtitalkbackend.util.authrization.AccessTokenManager;
 import com.mbtitalkbackend.util.authrization.AuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -96,7 +96,7 @@ public class MemberService {
         try {
             claims = Jwts
                     .parser()
-                    .setSigningKey(AccessToken.SALT)
+                    .setSigningKey(AccessTokenManager.SALT)
                     .parseClaimsJws(tokenString)
                     .getBody();
         } catch (ExpiredJwtException e) {
@@ -106,6 +106,10 @@ public class MemberService {
         }
 
         return (int) claims.get("memberId");
+    }
+
+    public boolean checkAuth(int memberId, int reqId) {
+        return memberId == reqId;
     }
 
     private String createNickName() {

@@ -4,13 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum SnsType {
-    KAKAO, NOVALUE;
+    KAKAO, NONE;
 
     public static SnsType compare(String str) {
-        try {
-            return valueOf(str.toUpperCase());
-        } catch (Exception ex) {
-            return NOVALUE;
+        for (SnsType t : SnsType.values()) {
+            if (t.name().equals(str.toUpperCase())) {
+                return t;
+            }
         }
+        return NONE;
     }
 }

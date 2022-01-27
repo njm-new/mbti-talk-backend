@@ -2,7 +2,7 @@ package com.mbtitalkbackend.resolver;
 
 import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.member.repository.MemberRepository;
-import com.mbtitalkbackend.util.authrization.AccessToken;
+import com.mbtitalkbackend.util.authrization.AccessTokenManager;
 import com.mbtitalkbackend.util.authrization.AuthorizationException;
 import com.mbtitalkbackend.util.authrization.ExpiredAccessTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -48,7 +48,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
             memberId = (int) Jwts
                     .parser()
-                    .setSigningKey(AccessToken.SALT)
+                    .setSigningKey(AccessTokenManager.SALT)
                     .parseClaimsJws(token)
                     .getBody()
                     .get("memberId");
