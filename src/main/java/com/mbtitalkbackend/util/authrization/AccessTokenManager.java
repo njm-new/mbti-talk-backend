@@ -8,7 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.Duration;
 import java.util.Date;
 
-public class AccessToken {
+public class AccessTokenManager {
     public static final String SALT = "njm-mbti";
 
     public String create(int memberId) {

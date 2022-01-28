@@ -1,87 +1,97 @@
 package com.mbtitalkbackend.member.controller;
 
+import com.mbtitalkbackend.common.ApiResponse;
 import com.mbtitalkbackend.member.model.dto.MemberDTO;
-import com.mbtitalkbackend.member.model.vo.GetInfoResponseVO;
+import com.mbtitalkbackend.member.model.vo.LoginRequestVO;
+import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.member.model.vo.LoginResponseVO;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
+import com.mbtitalkbackend.member.model.vo.RefreshTokenVO;
 import com.mbtitalkbackend.member.service.MemberService;
-import com.mbtitalkbackend.util.JsonWebToken;
+import com.mbtitalkbackend.util.authrization.AccessTokenManager;
+import com.mbtitalkbackend.util.authrization.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-
 @RestController
-@RequestMapping(value = "/api/member")
+@RequestMapping(value = "/members")
 @CrossOrigin(origins = "http://localhost:3000")
 public class MemberController {
-    private final JsonWebToken jsonWebToken;
+    private final AccessTokenManager accessTokenManager;
     private final MemberService memberService;
 
-    public MemberController(JsonWebToken jsonWebToken, MemberService memberService) {
-        this.jsonWebToken = jsonWebToken;
+    public MemberController(AccessTokenManager accessTokenManager, MemberService memberService) {
+        this.accessTokenManager = accessTokenManager;
         this.memberService = memberService;
     }
 
     //Login
-    @PostMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<?> login(@RequestHeader("code") String accessCode) {
+    @PostMapping(produces = "application/json")
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequestVO loginRequestVO) {
         MemberDTO member;
 
         try {
-            member = memberService.login(accessCode);
+            member = memberService.login(loginRequestVO);
         } catch (KakaoAuthenticationException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
-        String jwt = jsonWebToken.create(member.getMemberId());
 
-        return new ResponseEntity<>(new LoginResponseVO(jwt, member), HttpStatus.OK);
+        String jwt = accessTokenManager.create(member.getMemberId());
+
+        return new ResponseEntity<>(ApiResponse.success(LoginResponseVO.of(jwt, member)), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/mbti")
-    public ResponseEntity<?> updateMemberMbti(@RequestHeader("Authorization") String jwt,
-                                              @RequestBody HashMap<String, String> payload) {
-        int memberId = (int) jsonWebToken.validate(jwt).get("memberId");
-        String mbti = payload.get("mbti");
-
-        memberService.update(memberId, mbti);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //Update member info
-    @PatchMapping(value = "/change")
-    public ResponseEntity<?> updateMemberInfo(@RequestBody MemberDTO member) {
-        //If nickname is exist in DB
-        if (memberService.existNickname(member.getMemberId(), member.getNickname())) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        
-        memberService.update(member);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //Check nickname override
-    @GetMapping(value = "/nickname/{nickname}")
-    public ResponseEntity<?> checkNickname(@RequestHeader("Authorization") String jwt, @PathVariable("nickname") String nickname) {
-        int memberId = (int) jsonWebToken.validate(jwt).get("memberId");
-
-        //If nickname is exist in DB
-        if (memberService.existNickname(memberId, nickname)) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
-        memberService.updateNickname(memberId, nickname);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/info/{memberId}")
-    public ResponseEntity<?> getMemberInfo(@RequestHeader("Authorization") String jwt, @PathVariable("memberId") int memberId) {
+    @Authorization
+    @GetMapping(value = "/{memberId}")
+    public ResponseEntity<ApiResponse> getMemberInfo(@PathVariable("memberId") int memberId) {
         MemberDTO member = memberService.getInfo(memberId);
 
         if (member == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ApiResponse.fail("memberId가 존재하지 않습니다."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new GetInfoResponseVO(member), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.success(member), HttpStatus.OK);
+    }
+
+    //Update member info
+    @Authorization
+    @PatchMapping(value = "/{memberId}")
+    public ResponseEntity<ApiResponse> updateMemberInfo(Member member, @RequestBody MemberDTO memberDto, @PathVariable("memberId") int memberId) {
+        //본인 검증
+        if (!memberService.checkAuth(memberId, member.getMemberId()) || !memberService.checkAuth(memberId, memberDto.getMemberId())) {
+            return new ResponseEntity<>(ApiResponse.fail("자신의 정보만 수정할 수 있습니다."), HttpStatus.FORBIDDEN);
+        }
+
+        //If nickname is exist in DB
+        if (memberService.existNickname(memberDto.getMemberId(), memberDto.getNickname())) {
+            return new ResponseEntity<>(ApiResponse.fail("해당 닉네임이 이미 존재합니다."), HttpStatus.CONFLICT);
+        }
+
+        memberService.update(memberDto);
+        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+    }
+
+    //Check nickname override
+    @Authorization
+    @GetMapping(value = "/nickname/{nickname}")
+    public ResponseEntity<ApiResponse> checkNickname(Member member, @PathVariable("nickname") String nickname) {
+        //If nickname is exist in DB
+        if (memberService.existNickname(member.getMemberId(), nickname)) {
+            return new ResponseEntity<>(ApiResponse.fail("해당 닉네임이 이미 존재합니다."), HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+    }
+
+    //Refresh access token
+    @GetMapping(value = "/{memberId}/access-token")
+    public ResponseEntity<ApiResponse> refreshAccessToken(@RequestHeader("Authorization") String token, @PathVariable("memberId") int memberId) {
+        //토큰의 memberId가 요청한 memberId 같으면 refresh
+        if (!memberService.checkAuth(memberService.getMemberIdFromAccessToken(token), memberId)) {
+            return new ResponseEntity<>(ApiResponse.fail("요청자 정보가 토큰과 불일치합니다."), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(ApiResponse.success(RefreshTokenVO.from(accessTokenManager.create(memberId))), HttpStatus.OK);
     }
 }
