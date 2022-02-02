@@ -13,6 +13,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -37,7 +38,11 @@ public class MemberService {
             case KAKAO:
                 try {
                     //Authenticate user from Kakao
-                    String kakaoAccessToken = kakaoClient.getAccessToken(snsCode);
+                    String kakaoAccessToken = loginRequestVO.getSnsAccessToken();
+                    if (StringUtils.isBlank(kakaoAccessToken)) {
+                        kakaoAccessToken = kakaoClient.getAccessToken(snsCode);
+                    }
+
                     memberId = kakaoClient.getMemberId(kakaoAccessToken);
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
@@ -101,7 +106,7 @@ public class MemberService {
                     .getBody();
         } catch (ExpiredJwtException e) {
             return (int) e.getClaims().get("memberId");
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new AuthorizationException();
         }
 
