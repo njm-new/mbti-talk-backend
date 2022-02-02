@@ -10,38 +10,31 @@ import com.mbtitalkbackend.member.model.vo.RefreshTokenVO;
 import com.mbtitalkbackend.member.service.MemberService;
 import com.mbtitalkbackend.util.authrization.AccessTokenManager;
 import com.mbtitalkbackend.util.authrization.Authorization;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/members")
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class MemberController {
     private final AccessTokenManager accessTokenManager;
     private final MemberService memberService;
 
-    public MemberController(AccessTokenManager accessTokenManager, MemberService memberService) {
-        this.accessTokenManager = accessTokenManager;
-        this.memberService = memberService;
-    }
-
-    //Login
-    @PostMapping(produces = "application/json")
+    @PostMapping
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequestVO loginRequestVO) {
-        MemberDTO member;
-
         try {
-            member = memberService.login(loginRequestVO);
+            MemberDTO member = memberService.login(loginRequestVO);
+            final String accessToken = accessTokenManager.create(member.getMemberId());
+
+            return new ResponseEntity<>(ApiResponse.success(LoginResponseVO.of(accessToken, member)), HttpStatus.OK);
         } catch (KakaoAuthenticationException e) {
             return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.FORBIDDEN);
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
-
-        String jwt = accessTokenManager.create(member.getMemberId());
-
-        return new ResponseEntity<>(ApiResponse.success(LoginResponseVO.of(jwt, member)), HttpStatus.OK);
     }
 
     @Authorization
