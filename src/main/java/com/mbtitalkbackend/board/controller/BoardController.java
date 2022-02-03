@@ -19,7 +19,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse> listAllPost(@RequestBody PagingCriteria pagingCriteria) {
+    public ResponseEntity<ApiResponse> listAllPost(@ModelAttribute PagingCriteria pagingCriteria) {
 
         List<PostVO> postEntityList = boardService.listAllPostsWithPaging(pagingCriteria);
 
@@ -27,7 +27,7 @@ public class BoardController {
     }
 
     @GetMapping("/{mbti}")
-    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @RequestBody PagingCriteria pagingCriteria) {
+    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @ModelAttribute PagingCriteria pagingCriteria) {
 
         pagingCriteria.setRowPerPage(12);
 
