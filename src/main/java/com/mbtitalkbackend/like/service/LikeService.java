@@ -11,7 +11,7 @@ public class LikeService {
 
     private final LikeMapper likeMapper;
 
-    public void hitLike(LikeEntity likeEntity) {
+    public void like(LikeEntity likeEntity) {
 
         if(!isLike(likeEntity)) {
             likeMapper.createLike(likeEntity);
@@ -19,7 +19,7 @@ public class LikeService {
         }
     }
 
-    public void cancelLike(LikeEntity likeEntity) {
+    public void unLike(LikeEntity likeEntity) {
 
         if(likeMapper.deleteLike(likeEntity) == 1)
             likeMapper.decreaseLikeCount(likeEntity.getPostId());
