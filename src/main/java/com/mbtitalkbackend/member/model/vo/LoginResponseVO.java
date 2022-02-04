@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginResponseVO {
-    String jwt;
+    String accessToken;
     MemberDTO member;
 
-    public static LoginResponseVO of(String jwt, MemberDTO member) {
-        return new LoginResponseVO(jwt, member);
+    public static LoginResponseVO of(String accessToken, MemberDTO member) {
+        return new LoginResponseVO(accessToken, member);
     }
 }
