@@ -3,12 +3,10 @@ package com.mbtitalkbackend.board.model.VO;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardVO {
 
@@ -30,7 +28,7 @@ public class BoardVO {
     private int commentCount;
 
     // like Info
-    private boolean isLike;
+    private boolean like = true;
 
     public static BoardVO of(PostEntity postEntity, MemberEntity memberEntity, int commentCount) {
         BoardVO boardVO = new BoardVO();

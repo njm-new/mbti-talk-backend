@@ -62,11 +62,13 @@ public class BoardController {
 
     @GetMapping("/hot")
     public ResponseEntity<ApiResponse> listHotPosts(@RequestBody RequestVO requestVO) {
-        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+        List<BoardVO> boardVOList = boardService.listHotPosts(requestVO);
+        return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
     @GetMapping("/{mbti}/hot")
     public ResponseEntity<ApiResponse> listHotPostsInMbti(@PathVariable String mbti, @RequestBody RequestVO requestVO) {
-        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+        List<BoardVO> boardVOList = boardService.listHotPostsWithMbti(requestVO, mbti);
+        return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 }

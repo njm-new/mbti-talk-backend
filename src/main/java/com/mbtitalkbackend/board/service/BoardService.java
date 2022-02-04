@@ -113,6 +113,18 @@ public class BoardService {
         return generateList(postEntityList);
     }
 
+    public List<BoardVO> listHotPosts(RequestVO requestVO) {
+        List<PostEntity> postEntityList = boardMapper.findHotPosts(requestVO.getPagingCriteria());
+
+        return generateList(postEntityList);
+    }
+
+    public List<BoardVO> listHotPostsWithMbti(RequestVO requestVO, String mbti) {
+        List<PostEntity> postEntityList = boardMapper.findHotPostsWithMBTI(requestVO.getPagingCriteria(), mbti);
+
+        return generateList(postEntityList);
+    }
+
     public List<BoardVO> generateList(List<PostEntity> postEntityList) {
 
         List<BoardVO> boardVOList = new ArrayList<>();
