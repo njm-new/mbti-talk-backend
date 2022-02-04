@@ -8,14 +8,14 @@ import java.util.List;
 @Mapper
 public interface LikeMapper {
 
-    @Insert("INSERT INTO likeT (postId, memberId) VALUES(#{postId}, #{memberId})")
+    @Insert("INSERT INTO memberLike (postId, memberId) VALUES(#{postId}, #{memberId})")
     @Options(useGeneratedKeys = true, keyProperty = "likeId")
     Integer createLike(LikeEntity likeEntity);
 
-    @Delete("DELETE FROM likeT WHERE postId = #{postId} AND memberId = #{memberId}")
+    @Delete("DELETE FROM memberLike WHERE postId = #{postId} AND memberId = #{memberId}")
     Integer deleteLike(LikeEntity likeEntity);
 
-    @Select("SELECT * FROM likeT WHERE postId = #{postId} AND memberId = #{memberId}")
+    @Select("SELECT * FROM memberLike WHERE postId = #{postId} AND memberId = #{memberId}")
     LikeEntity findLike(LikeEntity likeEntity);
 
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) + 1 WHERE postId = #{postId}")
@@ -24,6 +24,6 @@ public interface LikeMapper {
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) - 1 WHERE postId = #{postId}")
     void decreaseLikeCount(long postId);
 
-    @Select("SELECT * FROM likeT WHERE memberId = #{memberId}")
+    @Select("SELECT * FROM memberLike WHERE memberId = #{memberId}")
     List<LikeEntity> findLikeByMemberId(int memberId);
 }

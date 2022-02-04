@@ -11,22 +11,18 @@ public class LikeService {
 
     private final LikeMapper likeMapper;
 
-    public void hitLike(LikeEntity likeEntity) throws Exception {
+    public void like(LikeEntity likeEntity) {
 
-        if(isLike(likeEntity)) {
-            throw new Exception();
-        } else {
+        if(!isLike(likeEntity)) {
             likeMapper.createLike(likeEntity);
             likeMapper.increaseLikeCount(likeEntity.getPostId());
         }
     }
 
-    public void cancelLike(LikeEntity likeEntity) throws Exception {
+    public void unLike(LikeEntity likeEntity) {
 
         if(likeMapper.deleteLike(likeEntity) == 1)
             likeMapper.decreaseLikeCount(likeEntity.getPostId());
-        else
-            throw new Exception();
     }
 
     public boolean isLike(LikeEntity likeEntity) {
