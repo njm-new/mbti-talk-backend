@@ -16,7 +16,7 @@ public interface CommentMapper {
     CommentEntity findCommentByCommentId(long commentId);
 
     @Select("SELECT * FROM comment WHERE postId = #{postId}")
-    List<CommentEntity> findCommentList(long postId);
+    List<CommentEntity> findCommentListByPostId(long postId);
 
     @Update("UPDATE comment SET content = #{content} WHERE commentId = #{commentId}")
     Integer updateComment(CommentEntity commentEntity);
@@ -28,5 +28,8 @@ public interface CommentMapper {
     Integer updateCommentModifiedTime(long commentId);
 
     @Select("SELECT COUNT(*) FROM comment WHERE postId = #{postId}")
-    int countCommentByCommentId(long postId);
+    int countCommentByPostId(long postId);
+
+    @Select("SELECT * FROM comment WHERE memberId = #{memberId}")
+    List<CommentEntity> findCommentListByMemberId(int memberId);
 }
