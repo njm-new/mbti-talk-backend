@@ -15,9 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/members")
-//@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class MemberController {
     private final AccessTokenManager accessTokenManager;
