@@ -3,10 +3,12 @@ package com.mbtitalkbackend.board.model.VO;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardVO {
 
