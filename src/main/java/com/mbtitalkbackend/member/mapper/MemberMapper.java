@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface MemberMapper {
-    @Insert("INSERT INTO member (memberId, nickname, mbti, content, createTime, modifiedTime) VALUES (#{memberId}, #{nickname}, #{mbti}, #{content}, #{createTime}, #{modifiedTime})")
+    @Insert("INSERT INTO member (memberId, nickname, mbti, content) VALUES (#{memberId}, #{nickname}, #{mbti}, #{content})")
     Integer insertMember(MemberEntity member);
 
     @Select("SELECT * FROM member WHERE memberId = #{memberId}")
@@ -20,12 +20,6 @@ public interface MemberMapper {
     @Select("SELECT COUNT(nickname) FROM member WHERE nickname = #{nickname} and memberId != #{memberId}")
     Integer existNickname(int memberId, String nickname);
 
-    @Update("UPDATE member SET nickname=#{nickname}, mbti=#{mbti}, content=#{content}, modifiedTime=#{modifiedTime} WHERE memberId=#{memberId}")
+    @Update("UPDATE member SET nickname=#{nickname}, mbti=#{mbti}, content=#{content}, modifiedTime=NOW() WHERE memberId=#{memberId}")
     Integer patchMember(MemberEntity member);
-
-    @Update("UPDATE member SET nickname=#{nickname}, modifiedTime=NOW() WHERE memberId=#{memberId}")
-    Integer putNickname(int memberId, String nickname);
-
-    @Update("UPDATE member SET mbti=#{mbti}, modifiedTime=NOW() WHERE memberId=#{memberId}")
-    Integer putMbti(int memberId, String mbti);
 }

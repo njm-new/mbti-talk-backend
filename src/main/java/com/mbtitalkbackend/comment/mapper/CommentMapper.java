@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("INSERT INTO comment (postId, memberId, title, content, likeCount) VALUES(#{postId}, #{memberId}, #{title}, #{content}, #{likeCount})")
+    @Insert("INSERT INTO comment (postId, memberId, content, likeCount) VALUES(#{postId}, #{memberId}, #{content}, #{likeCount})")
     @Options(useGeneratedKeys = true, keyProperty = "commentId")
     Integer createComment(CommentEntity commentEntity);
 

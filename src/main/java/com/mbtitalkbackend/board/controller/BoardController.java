@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/boards")
@@ -21,7 +22,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse> listAllPost(@RequestBody RequestVO requestVO) {
+    public ResponseEntity<ApiResponse> listAllPost(@ModelAttribute RequestVO requestVO) {
 
 //        List<BoardVO> boardVOList = boardService.listAllPostsWithPaging(pagingCriteria);
         List<BoardVO> boardVOList = boardService.listPosts(requestVO.getPagingCriteria());
@@ -31,7 +32,7 @@ public class BoardController {
     }
 
     @GetMapping("/{mbti}")
-    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @RequestBody RequestVO requestVO) {
+    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @ModelAttribute RequestVO requestVO) {
 
         requestVO.getPagingCriteria().setRowPerPage(12);
 
