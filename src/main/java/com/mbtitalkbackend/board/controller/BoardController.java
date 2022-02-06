@@ -5,7 +5,6 @@ import com.mbtitalkbackend.board.model.VO.BoardVO;
 import com.mbtitalkbackend.board.model.VO.RequestVO;
 import com.mbtitalkbackend.board.service.BoardService;
 import com.mbtitalkbackend.common.ApiResponse;
-import com.mbtitalkbackend.post.model.VO.PostVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +21,19 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse> listAllPost(@ModelAttribute RequestVO requestVO) {
+    public ResponseEntity<ApiResponse> listAllPost(@ModelAttribute PagingCriteria pagingCriteria) {
 
-//        List<BoardVO> boardVOList = boardService.listAllPostsWithPaging(pagingCriteria);
-        List<BoardVO> boardVOList = boardService.listPosts(requestVO.getPagingCriteria());
+        List<BoardVO> boardVOList = boardService.listPosts(pagingCriteria);
 
 
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
     @GetMapping("/{mbti}")
-    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @ModelAttribute RequestVO requestVO) {
-
-        requestVO.getPagingCriteria().setRowPerPage(12);
+    public ResponseEntity<ApiResponse> listAllWithMBTI(@PathVariable("mbti") String mbti, @ModelAttribute PagingCriteria pagingCriteria) {
 
 //        List<BoardVO> boardVOList = boardService.listAllPostsWithMBTI(pagingCriteria, mbti);
-        List<BoardVO> boardVOList = boardService.listPosts(requestVO.getPagingCriteria(), mbti);
+        List<BoardVO> boardVOList = boardService.listPosts(pagingCriteria, mbti);
 
 
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
