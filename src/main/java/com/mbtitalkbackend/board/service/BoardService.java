@@ -3,13 +3,13 @@ package com.mbtitalkbackend.board.service;
 import com.mbtitalkbackend.board.mapper.BoardMapper;
 import com.mbtitalkbackend.board.model.PagingCriteria;
 import com.mbtitalkbackend.board.model.VO.BoardVO;
-import com.mbtitalkbackend.board.model.VO.RequestVO;
 import com.mbtitalkbackend.comment.mapper.CommentMapper;
 import com.mbtitalkbackend.comment.model.entity.CommentEntity;
 import com.mbtitalkbackend.like.mapper.LikeMapper;
 import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
+import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.post.mapper.PostMapper;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import lombok.RequiredArgsConstructor;
@@ -34,59 +34,29 @@ public class BoardService {
         return boardMapper.findAllPosts();
     }
 
-
-    // 1안 이름 구별이 쉽게
-    public List<BoardVO> listAllPostsWithPaging(PagingCriteria pagingCriteria) {
-
-        List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(pagingCriteria);
-
-        return generateList(postEntityList);
-    }
-
-    public List<BoardVO> listAllPostsWithMBTI(PagingCriteria pagingCriteria, String mbti) {
-
-        List<PostEntity> postEntityList = boardMapper.findAllPostsWithMBTI(pagingCriteria, mbti);
-
-        return generateList(postEntityList);
-    }
-
-
-    // 2안 메소드 오버로딩
     public List<BoardVO> listPosts(PagingCriteria pagingCriteria) {
         List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(pagingCriteria);
 
         return generateList(postEntityList);
     }
 
-    public List<BoardVO> listPosts(PagingCriteria pagingCriteria, String mbti) {
-        List<PostEntity> postEntityList = boardMapper.findAllPostsWithMBTI(pagingCriteria, mbti);
+    // boardId로 검색 mbti or ALL
+    public List<BoardVO> listPosts(PagingCriteria pagingCriteria, String boardId) {
+        List<PostEntity> postEntityList = boardMapper.findAllPostsWithBoardId(pagingCriteria, boardId);
 
         return generateList(postEntityList);
     }
 
-    public List<BoardVO> listPosts(PagingCriteria pagingCriteria, long memberId) {
-        List<PostEntity> postEntityList = boardMapper.findMyPosts(pagingCriteria, memberId);
+    // memberId로 검색, 내 게시글
+    public List<BoardVO> listPosts(PagingCriteria pagingCriteria, Member member) {
+        List<PostEntity> postEntityList = boardMapper.findMyPosts(pagingCriteria, member.getMemberId());
 
         return generateList(postEntityList);
     }
 
-
-    // 3안 객체로 받아 분기문으로 처리
-    public List<BoardVO> listPosts(RequestVO requestVO) {
-
-        List<PostEntity> postEntityList;
-
-        if(requestVO.getMemberId() == 0)
-            postEntityList = boardMapper.findAllPostsWithPaging(requestVO.getPagingCriteria());
-        else
-            postEntityList = boardMapper.findMyPosts(requestVO.getPagingCriteria(), requestVO.getMemberId());
-
-        return generateList(postEntityList);
-    }
-
-
-    public List<BoardVO> listCommentPosts(RequestVO requestVO) {
-        List<CommentEntity> commentEntityList = commentMapper.findCommentListByMemberId(requestVO.getMemberId());
+    // 내가 댓글 쓴 게시글
+    public List<BoardVO> listCommentPosts(PagingCriteria pagingCriteria, Member member) {
+        List<CommentEntity> commentEntityList = commentMapper.findCommentListByMemberId(member.getMemberId());
         LinkedHashSet<Long> linkedHashSet = new LinkedHashSet<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
@@ -102,8 +72,9 @@ public class BoardService {
         return generateList(postEntityList);
     }
 
-    public List<BoardVO> listLikePosts(RequestVO requestVO) {
-        List<LikeEntity> likeEntityList = likeMapper.findLikeByMemberId(requestVO.getMemberId());
+    // 내가 좋아요한 게시글
+    public List<BoardVO> listLikePosts(PagingCriteria pagingCriteria, Member member) {
+        List<LikeEntity> likeEntityList = likeMapper.findLikeByMemberId(member.getMemberId());
         List<PostEntity> postEntityList = new ArrayList<>();
 
         for (LikeEntity likeEntity : likeEntityList) {
@@ -113,14 +84,16 @@ public class BoardService {
         return generateList(postEntityList);
     }
 
-    public List<BoardVO> listHotPosts(RequestVO requestVO) {
-        List<PostEntity> postEntityList = boardMapper.findHotPosts(requestVO.getPagingCriteria());
+    // 전체 핫 게시글
+    public List<BoardVO> listHotPosts(PagingCriteria pagingCriteria) {
+        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(pagingCriteria, "ALL");
 
         return generateList(postEntityList);
     }
 
-    public List<BoardVO> listHotPostsWithMbti(RequestVO requestVO, String mbti) {
-        List<PostEntity> postEntityList = boardMapper.findHotPostsWithMBTI(requestVO.getPagingCriteria(), mbti);
+    // mbti 핫 게시글
+    public List<BoardVO> listHotPostsWithMbti(PagingCriteria pagingCriteria, String mbti) {
+        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(pagingCriteria, mbti);
 
         return generateList(postEntityList);
     }

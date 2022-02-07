@@ -30,7 +30,7 @@ public class BoardVO {
     private int commentCount;
 
     // like Info
-    private boolean like = true;
+    private boolean like;
 
     public static BoardVO of(PostEntity postEntity, MemberEntity memberEntity, int commentCount) {
         BoardVO boardVO = new BoardVO();

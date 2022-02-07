@@ -11,7 +11,7 @@ public class PagingCriteria {
     private int rowPerPage = 12; //  default page amount = 12
 
     public PagingCriteria() {
-        this(1, 12);
+        this(0, 12);
     }
 
     public PagingCriteria(int pageNum, int rowPerPage) {
