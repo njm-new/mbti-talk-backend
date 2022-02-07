@@ -1,8 +1,6 @@
 package com.mbtitalkbackend.client.kakao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mbtitalkbackend.member.exception.KakaoAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -16,8 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -66,13 +62,12 @@ public class KakaoClient {
                     .share()
                     .block();
         } catch (NullPointerException e) {
-            System.out.println(e);
             throw new KakaoAuthenticationException();
         }
         return kaKaoAccessTokenEntity.getAccess_token();
     }
 
-    public int getMemberId(String accessToken) throws JsonProcessingException {
+    public String getMemberId(String accessToken) throws JsonProcessingException {
         KakaoMemberEntity kakaoMemberEntity;
 
         try {
@@ -90,7 +85,6 @@ public class KakaoClient {
                     .share()
                     .block();
         } catch (NullPointerException e) {
-            System.out.println(e);
             throw new KakaoAuthenticationException();
         }
 

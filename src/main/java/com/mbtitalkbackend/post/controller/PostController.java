@@ -18,7 +18,6 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createPosts(@RequestBody PostVO postVO) {
-
         int res = postService.createPost(postVO);
 
         if(res > 0)
@@ -28,7 +27,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}") // 호출할일 없고, 디자인 잘해놨으면 메소드가 구분할 필요가없다
-    public ResponseEntity<ApiResponse> readPostsByPostId(@PathVariable("postId") long postId) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
+    public ResponseEntity<ApiResponse> readPostsByPostId(@PathVariable("postId") String postId) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
 
         try {
             PostVO postVO = postService.findPostEntityById(postId);
@@ -42,7 +41,7 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<ApiResponse> updatePostByPostId(@PathVariable("postId") long postId, @RequestBody PostVO postVO) {
+    public ResponseEntity<ApiResponse> updatePostByPostId(@PathVariable("postId") String postId, @RequestBody PostVO postVO) {
 
         int res = postService.patchPostById(postId, postVO);
 
@@ -53,7 +52,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResponse> deletePostByPostId(@PathVariable("postId") long postId) {
+    public ResponseEntity<ApiResponse> deletePostByPostId(@PathVariable("postId") String postId) {
 
         int res = postService.deletePostById(postId);
 

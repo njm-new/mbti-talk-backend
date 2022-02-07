@@ -39,7 +39,7 @@ public class MemberController {
 
     @Authorization
     @GetMapping(value = "/{memberId}")
-    public ResponseEntity<ApiResponse> getMemberInfo(@PathVariable("memberId") int memberId) {
+    public ResponseEntity<ApiResponse> getMemberInfo(@PathVariable("memberId") String memberId) {
         MemberDTO member = memberService.getInfo(memberId);
 
         if (member == null) {
@@ -52,7 +52,7 @@ public class MemberController {
     //Update member info
     @Authorization
     @PatchMapping(value = "/{memberId}")
-    public ResponseEntity<ApiResponse> updateMemberInfo(Member member, @RequestBody MemberDTO memberDto, @PathVariable("memberId") int memberId) {
+    public ResponseEntity<ApiResponse> updateMemberInfo(Member member, @RequestBody MemberDTO memberDto, @PathVariable("memberId") String memberId) {
         //본인 검증
         if (!memberService.checkAuth(memberId, member.getMemberId()) || !memberService.checkAuth(memberId, memberDto.getMemberId())) {
             return new ResponseEntity<>(ApiResponse.fail("자신의 정보만 수정할 수 있습니다."), HttpStatus.FORBIDDEN);
@@ -80,7 +80,7 @@ public class MemberController {
 
     //Refresh access token
     @GetMapping(value = "/{memberId}/access-token")
-    public ResponseEntity<ApiResponse> refreshAccessToken(@RequestHeader("Authorization") String token, @PathVariable("memberId") int memberId) {
+    public ResponseEntity<ApiResponse> refreshAccessToken(@RequestHeader("Authorization") String token, @PathVariable("memberId") String memberId) {
         //토큰의 memberId가 요청한 memberId 같으면 refresh
         if (!memberService.checkAuth(memberService.getMemberIdFromAccessToken(token), memberId)) {
             return new ResponseEntity<>(ApiResponse.fail("요청자 정보가 토큰과 불일치합니다."), HttpStatus.FORBIDDEN);

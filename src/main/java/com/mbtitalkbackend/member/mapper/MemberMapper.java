@@ -12,13 +12,13 @@ public interface MemberMapper {
     Integer insertMember(MemberEntity member);
 
     @Select("SELECT * FROM member WHERE memberId = #{memberId}")
-    MemberEntity findMemberById(int memberId);
+    MemberEntity findMemberById(String memberId);
 
     @Select("SELECT COUNT(nickname) FROM member WHERE nickname = #{nickname}")
     Integer existNicknameAll(String nickname);
 
     @Select("SELECT COUNT(nickname) FROM member WHERE nickname = #{nickname} and memberId != #{memberId}")
-    Integer existNickname(int memberId, String nickname);
+    Integer existNickname(String memberId, String nickname);
 
     @Update("UPDATE member SET nickname=#{nickname}, mbti=#{mbti}, content=#{content}, modifiedTime=NOW() WHERE memberId=#{memberId}")
     Integer patchMember(MemberEntity member);

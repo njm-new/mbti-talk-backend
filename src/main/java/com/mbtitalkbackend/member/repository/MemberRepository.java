@@ -15,7 +15,7 @@ public class MemberRepository {
         this.memberMapper = memberMapper;
     }
 
-    public MemberDTO getMemberInfo(int memberId) {
+    public MemberDTO getMemberInfo(String memberId) {
         MemberEntity memberEntity = memberMapper.findMemberById(memberId);
 
         if (memberEntity == null) {
@@ -33,7 +33,7 @@ public class MemberRepository {
         return memberMapper.existNicknameAll(nickname) > 0;
     }
 
-    public boolean existNickname(int memberId, String nickname) {
+    public boolean existNickname(String memberId, String nickname) {
         return memberMapper.existNickname(memberId, nickname) > 0;
     }
 

@@ -30,7 +30,7 @@ public class MemberService {
     }
 
     public MemberDTO login(LoginRequestVO loginRequestVO) throws IllegalAccessException {
-        int memberId;
+        String memberId;
         String snsType = loginRequestVO.getSnsType();
         String snsCode = loginRequestVO.getSnsCode();
 
@@ -70,7 +70,7 @@ public class MemberService {
     }
 
 
-    public MemberDTO getInfo(int memberId) {
+    public MemberDTO getInfo(String memberId) {
         return memberRepository.getMemberInfo(memberId);
     }
 
@@ -78,14 +78,14 @@ public class MemberService {
         memberRepository.update(memberDTO);
     }
 
-    public boolean existNickname(int memberId, String nickname) {
+    public boolean existNickname(String memberId, String nickname) {
         if (nickname == null) {
             return true;
         }
         return memberRepository.existNickname(memberId, nickname);
     }
 
-    public int getMemberIdFromAccessToken(String accessToken) {
+    public String getMemberIdFromAccessToken(String accessToken) {
         String tokenHeader = "Bearer";
 
         //Validate Authorization Header
@@ -105,16 +105,16 @@ public class MemberService {
                     .parseClaimsJws(tokenString)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            return (int) e.getClaims().get("memberId");
+            return (String) e.getClaims().get("memberId");
         } catch (Exception e) {
             throw new AuthorizationException();
         }
 
-        return (int) claims.get("memberId");
+        return (String) claims.get("memberId");
     }
 
-    public boolean checkAuth(int memberId, int reqId) {
-        return memberId == reqId;
+    public boolean checkAuth(String memberId, String reqId) {
+        return memberId.equals(reqId);
     }
 
     private String createNickName() {

@@ -11,7 +11,7 @@ import java.util.Date;
 public class AccessTokenManager {
     public static final String SALT = "njm-mbti";
 
-    public String create(int memberId) {
+    public String create(String memberId) {
         //Set issue time
         Date now = new Date();
 

@@ -19,11 +19,11 @@ public interface LikeMapper {
     LikeEntity findLike(LikeEntity likeEntity);
 
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) + 1 WHERE postId = #{postId}")
-    void increaseLikeCount(long postId);
+    void increaseLikeCount(String postId);
 
     @Update("UPDATE post SET likeCount = IFNULL(likeCount, 0) - 1 WHERE postId = #{postId}")
-    void decreaseLikeCount(long postId);
+    void decreaseLikeCount(String postId);
 
     @Select("SELECT * FROM memberLike WHERE memberId = #{memberId}")
-    List<LikeEntity> findLikeByMemberId(int memberId);
+    List<LikeEntity> findLikeByMemberId(String memberId);
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
-    private int memberId;
+    private String memberId;
     private String nickname;
     private String mbti;
     private String content;

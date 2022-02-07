@@ -22,13 +22,13 @@ public class PictureController {
     private final PictureService pictureService;
 
     @GetMapping("/images")
-    public ResponseEntity<ApiResponse> getImagesUrl(@PathVariable long postId) {
+    public ResponseEntity<ApiResponse> getImagesUrl(@PathVariable String postId) {
         List<ImageInfoVO> imageInfoVOList = pictureService.listPictureVOListByPostID(postId);
         return new ResponseEntity<>(ApiResponse.success(imageInfoVOList), HttpStatus.OK);
     }
 
     @PostMapping("/images")
-    public ResponseEntity<ApiResponse> uploadImages(@PathVariable long postId, @ModelAttribute ImageVOList imageVOList) {
+    public ResponseEntity<ApiResponse> uploadImages(@PathVariable String postId, @ModelAttribute ImageVOList imageVOList) {
 
         List<ImageInfoVO> imageInfoVOList = pictureService.uploadImages(postId, imageVOList);
 
@@ -36,7 +36,7 @@ public class PictureController {
     }
 
     @DeleteMapping("/images/{pictureName}")
-    public ResponseEntity<ApiResponse> deleteImage(@PathVariable long postId, @PathVariable String pictureName) {
+    public ResponseEntity<ApiResponse> deleteImage(@PathVariable String postId, @PathVariable String pictureName) {
         pictureService.deletePicture(pictureName);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class PictureController {
 
     // 개별 업로드용
     @PostMapping("/image")
-    public ResponseEntity<ApiResponse> uploadImage(@PathVariable long postId, @ModelAttribute ImageVO imageVO) {
+    public ResponseEntity<ApiResponse> uploadImage(@PathVariable String postId, @ModelAttribute ImageVO imageVO) {
         ImageInfoVO imageInfoVO = pictureService.uploadImage(postId, imageVO);
         return new ResponseEntity<>(ApiResponse.success(imageInfoVO), HttpStatus.OK);
     }

@@ -30,16 +30,15 @@ public class CommentService {
 
         try {
             CommentEntity commentEntity = commentMapper.findCommentByCommentId(commentId);
-            MemberEntity memberEntity = memberMapper.findMemberById((int) commentEntity.getMemberId());
+            MemberEntity memberEntity = memberMapper.findMemberById(commentEntity.getMemberId());
 
             return CommentVO.of(commentEntity, memberEntity);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new NullPointerException();
         }
     }
 
-    public CommentVOList findCommentList(long postId) {
+    public CommentVOList findCommentList(String postId) {
 
         List<CommentEntity> commentEntityList = commentMapper.findCommentListByPostId(postId);
 
@@ -48,7 +47,7 @@ public class CommentService {
         List<CommentVO> commentList = new ArrayList<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
-            MemberEntity memberEntity = memberMapper.findMemberById((int) commentEntity.getMemberId());
+            MemberEntity memberEntity = memberMapper.findMemberById(commentEntity.getMemberId());
 
             commentList.add(CommentVO.of(commentEntity, memberEntity));
         }
@@ -66,8 +65,7 @@ public class CommentService {
             commentEntity.setContent(commentVO.getContent());
 
             return commentMapper.updateComment(commentEntity);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new NullPointerException();
         }
 
