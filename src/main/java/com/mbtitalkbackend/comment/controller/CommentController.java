@@ -18,7 +18,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getCommentList(@PathVariable long postId) {
+    public ResponseEntity<ApiResponse> getCommentList(@PathVariable String postId) {
         CommentVOList commentVOList = commentService.findCommentList(postId);
 
         return new ResponseEntity<>(ApiResponse.success(commentVOList), HttpStatus.OK);
@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> patchComment(@PathVariable long postId, @PathVariable long commentId, @RequestBody CommentVO commentVO) {
+    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable long commentId, @RequestBody CommentVO commentVO) {
 
         commentService.updateComment(commentId, commentVO);
 
@@ -41,7 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> deleteComment(@PathVariable long postId, @PathVariable long commentId) {
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable String postId, @PathVariable long commentId) {
 
         commentService.deleteCommentByCommentId(commentId);
 

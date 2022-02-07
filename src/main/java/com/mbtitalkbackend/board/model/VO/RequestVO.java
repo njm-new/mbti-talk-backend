@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RequestVO {
 
-    private int memberId;
+    private String memberId;
     private PagingCriteria pagingCriteria;
 }

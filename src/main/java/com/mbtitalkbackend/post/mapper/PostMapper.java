@@ -11,17 +11,17 @@ public interface PostMapper {
     Integer postPost(PostEntity postEntity);
 
     @Select("SELECT * FROM post WHERE postId = #{postId}")
-    PostEntity findPostEntityByPostId(long postId);
+    PostEntity findPostEntityByPostId(String postId);
 
     @Update("UPDATE post SET boardId = #{boardId}, title = #{title}, content = #{content} WHERE postId = #{postId}")
     Integer updatePost(PostEntity postEntity);
 
     @Update("UPDATE post SET viewCount = IFNULL(viewCount, 0) + 1 WHERE postId = #{postId}")
-    void increaseViewCount(long postId);
+    void increaseViewCount(String postId);
 
     @Delete("DELETE FROM post WHERE postId = #{postId}")
-    Integer deletePostByPostId(long postId);
+    Integer deletePostByPostId(String postId);
 
     @Update("UPDATE post SET modifiedTime = now() WHERE postId = #{postId}")
-    Integer updatePostModifiedTime(long postId);
+    Integer updatePostModifiedTime(String postId);
 }

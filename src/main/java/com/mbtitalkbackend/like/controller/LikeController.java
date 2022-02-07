@@ -17,14 +17,14 @@ public class LikeController {
     public final LikeService likeService;
 
     @PostMapping("/like")
-    public ResponseEntity<ApiResponse> hitLike(@PathVariable long postId, @RequestBody LikeEntity likeEntity) {
+    public ResponseEntity<ApiResponse> hitLike(@PathVariable String postId, @RequestBody LikeEntity likeEntity) {
 
         likeService.like(likeEntity);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<ApiResponse> cancelLike(@PathVariable long postId, @RequestBody LikeEntity likeEntity) {
+    public ResponseEntity<ApiResponse> cancelLike(@PathVariable String postId, @RequestBody LikeEntity likeEntity) {
 
         likeService.unLike(likeEntity);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);

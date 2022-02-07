@@ -14,9 +14,9 @@ import java.sql.Timestamp;
 public class CommentEntity {
 
     private long commentId;
-    private long postId;
+    private String postId;
     private long recommentId;
-    private long memberId;
+    private String memberId;
     private String title;
     private String content;
     private long likeCount;

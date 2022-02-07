@@ -13,14 +13,14 @@ import java.sql.Timestamp;
 public class CommentVO {
 
     private long commentId;
-    private long postId;
+    private String postId;
     private long recommentId;
     private String content;
     private long likeCount;
     private Timestamp createTime;
 
     //member Info
-    private long memberId;
+    private String memberId;
     private String mbti;
     private String nickname;
 

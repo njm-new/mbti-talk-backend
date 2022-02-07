@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 public class PictureEntity {
 
     private long pictureId;
-    private long postId;
+    private String postId;
     private long commentId;
     private String pictureName;
     private String pictureUrl;
@@ -17,7 +17,7 @@ public class PictureEntity {
     private Timestamp createTime;
     private Timestamp modifiedTime;
 
-    public static PictureEntity of (long postId, String pictureName, String pictureUrl, String comment) {
+    public static PictureEntity of (String postId, String pictureName, String pictureUrl, String comment) {
         PictureEntity pictureEntity = new PictureEntity();
 
         pictureEntity.postId = postId;

@@ -10,7 +10,7 @@ import lombok.Setter;
 public class LikeEntity {
 
     private int likeId;
-    private int postId;
-    private int memberId;
+    private String postId;
+    private String memberId;
     private int likeCheck;
 }

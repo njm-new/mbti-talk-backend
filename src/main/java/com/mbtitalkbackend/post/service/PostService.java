@@ -15,13 +15,15 @@ public class PostService {
     private final PostMapper postMapper;
     private final MemberMapper memberMapper;
 
-    public PostVO findPostEntityById(long postId) {
+    public PostVO findPostEntityById(String postId) {
 
         try {
             postMapper.increaseViewCount(postId);
 
             PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
             MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
+
+            //todo: Post boardId와 member Mbti 비교 필요
 
             return PostVO.of(postEntity, memberEntity);
         }
@@ -37,7 +39,7 @@ public class PostService {
         return postMapper.postPost(postEntity);
     }
 
-    public Integer patchPostById(long postId, PostVO postVO) {
+    public Integer patchPostById(String postId, PostVO postVO) {
 
         postMapper.updatePostModifiedTime(postId);
         PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
@@ -54,7 +56,7 @@ public class PostService {
         return postMapper.updatePost(postEntity);
     }
 
-    public Integer deletePostById(long postId) {
+    public Integer deletePostById(String postId) {
         return postMapper.deletePostByPostId(postId);
     }
 }

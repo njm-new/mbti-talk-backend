@@ -13,7 +13,7 @@ public interface PictureMapper {
     Integer insertPicture(PictureEntity pictureEntity);
 
     @Select("SELECT * FROM picture WHERE postId = #{postId}")
-    List<PictureEntity> findAllPictureEntityByPostId(long postId);
+    List<PictureEntity> findAllPictureEntityByPostId(String postId);
 
     @Select("UPDATE picture SET pictureName = #{pictureName}, pictureUrl = #{pictureUrl}, comment = #{comment}")
     Integer updatePictureByPictureId(PictureEntity pictureEntity);

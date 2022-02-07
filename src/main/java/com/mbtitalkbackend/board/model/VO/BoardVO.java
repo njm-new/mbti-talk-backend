@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class BoardVO {
 
     // post Info
-    private long postId;
+    private String postId;
     private String boardId;
     private String title;
     private String content;
@@ -22,7 +22,7 @@ public class BoardVO {
     private Timestamp createTime;
 
     // member Info
-    private int memberId;
+    private String memberId;
     private String mbti;
     private String nickname;
 

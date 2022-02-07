@@ -20,7 +20,7 @@ public interface BoardMapper {
     List<PostEntity> findAllPostsWithBoardId(PagingCriteria pagingCriteria, String boardId);
 
     @Select("SELECT * FROM post WHERE memberId = #{memberId} AND postId BETWEEN #{pagingCriteria.pageNum} * #{pagingCriteria.rowPerPage} AND (#{pagingCriteria.pageNum} + 1) * #{pagingCriteria.rowPerPage}")
-    List<PostEntity> findMyPosts(PagingCriteria pagingCriteria, long memberId);
+    List<PostEntity> findMyPosts(PagingCriteria pagingCriteria, String memberId);
 
     @Select("SELECT R1.* FROM (SELECT * FROM post WHERE boardId = #{boardId} ORDER BY ((likeCount * 10) + viewCount) DESC) R1 LIMIT #{pagingCriteria.pageNum}, #{pagingCriteria.rowPerPage}")
     List<PostEntity> findHotPostsWithBoardId(PagingCriteria pagingCriteria, String boardId);

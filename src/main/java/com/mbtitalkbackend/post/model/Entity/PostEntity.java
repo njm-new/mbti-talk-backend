@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostEntity {
 
-    private long postId;
+    private String postId;
     private String boardId;
-    private int memberId;
+    private String memberId;
     private String title;
     private String content;
     private long viewCount;

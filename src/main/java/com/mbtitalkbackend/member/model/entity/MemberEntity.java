@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberEntity {
-    private int memberId;
+    private String memberId;
     private String nickname;
     private String mbti;
     private String content;
     private Timestamp createTime;
     private Timestamp modifiedTime;
 
-    private MemberEntity(int memberId, String nickname, String mbti, String content) {
+    private MemberEntity(String memberId, String nickname, String mbti, String content) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.mbti = mbti;

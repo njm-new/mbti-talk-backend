@@ -36,7 +36,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
         String tokenHeader = "bearer ";
         String token = request.getHeader("Authorization");
-        int memberId;
+        String memberId;
 
         try {
             //Validate Authorization Header
@@ -46,7 +46,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
             token = token.substring(tokenHeader.length());
 
-            memberId = (int) Jwts
+            memberId = (String) Jwts
                     .parser()
                     .setSigningKey(AccessTokenManager.SALT)
                     .parseClaimsJws(token)

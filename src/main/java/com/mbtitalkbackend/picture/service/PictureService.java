@@ -23,7 +23,7 @@ public class PictureService {
     private final AwsS3UploadService s3Service;
     private final PictureMapper pictureMapper;
 
-    public List<ImageInfoVO> uploadImages(long postId, ImageVOList imageVOList) {
+    public List<ImageInfoVO> uploadImages(String postId, ImageVOList imageVOList) {
 
         List<ImageInfoVO> imageInfoVOList = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class PictureService {
         return imageInfoVOList;
     }
 
-    public ImageInfoVO uploadImage(long postId, ImageVO imageVO) {
+    public ImageInfoVO uploadImage(String postId, ImageVO imageVO) {
 
         String fileName = createFileName(imageVO.getFile().getOriginalFilename());
 
@@ -68,7 +68,7 @@ public class PictureService {
         }
     }
 
-    public List<ImageInfoVO> listPictureVOListByPostID(long postId) {
+    public List<ImageInfoVO> listPictureVOListByPostID(String postId) {
         List<PictureEntity> pictureEntityList = pictureMapper.findAllPictureEntityByPostId(postId);
         List<ImageInfoVO> imageInfoVOList = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class PictureService {
         pictureMapper.deletePicture(pictureName);
     }
 
-    public void updatePicture(String pictureName, long postId, String comment, List<MultipartFile> files) {
+    public void updatePicture(String pictureName, String postId, String comment, List<MultipartFile> files) {
         deletePicture(pictureName);
     }
 }

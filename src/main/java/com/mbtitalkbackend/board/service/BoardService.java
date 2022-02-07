@@ -57,7 +57,7 @@ public class BoardService {
     // 내가 댓글 쓴 게시글
     public List<BoardVO> listCommentPosts(PagingCriteria pagingCriteria, Member member) {
         List<CommentEntity> commentEntityList = commentMapper.findCommentListByMemberId(member.getMemberId());
-        LinkedHashSet<Long> linkedHashSet = new LinkedHashSet<>();
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
             linkedHashSet.add(commentEntity.getPostId());
@@ -65,7 +65,7 @@ public class BoardService {
 
         List<PostEntity> postEntityList = new ArrayList<>();
 
-        for (Long postId : linkedHashSet) {
+        for (String postId : linkedHashSet) {
             postEntityList.add(postMapper.findPostEntityByPostId(postId));
         }
 

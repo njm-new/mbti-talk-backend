@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PostVO {
 
-    private long postId;
+    private String postId;
     private String boardId;
     private String title;
     private String content;
@@ -21,7 +21,7 @@ public class PostVO {
     private Timestamp createTime;
 
     //member Info
-    private int memberId;
+    private String memberId;
     private String mbti;
     private String nickname;
 

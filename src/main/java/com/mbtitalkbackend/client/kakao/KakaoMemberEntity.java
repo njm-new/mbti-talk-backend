@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class KakaoMemberEntity {
-    private int id;
+    private String id;
     private String connected_at;
 }
