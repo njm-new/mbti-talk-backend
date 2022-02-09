@@ -12,5 +12,13 @@ public class LikeEntity {
     private int likeId;
     private String postId;
     private String memberId;
-    private int likeCheck;
+
+    public static LikeEntity create(String postId, String memberId) {
+        LikeEntity likeEntity = new LikeEntity();
+
+        likeEntity.postId = postId;
+        likeEntity.memberId = memberId;
+
+        return likeEntity;
+    }
 }

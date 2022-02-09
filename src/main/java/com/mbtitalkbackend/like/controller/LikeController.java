@@ -3,6 +3,7 @@ package com.mbtitalkbackend.like.controller;
 import com.mbtitalkbackend.common.ApiResponse;
 import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import com.mbtitalkbackend.like.service.LikeService;
+import com.mbtitalkbackend.member.model.vo.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +18,16 @@ public class LikeController {
     public final LikeService likeService;
 
     @PostMapping("/like")
-    public ResponseEntity<ApiResponse> hitLike(@PathVariable String postId, @RequestBody LikeEntity likeEntity) {
+    public ResponseEntity<ApiResponse> hitLike(@PathVariable String postId, Member member) {
 
-        likeService.like(likeEntity);
+        likeService.like(LikeEntity.create(postId, member.getMemberId()));
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
     @DeleteMapping("/like")
-    public ResponseEntity<ApiResponse> cancelLike(@PathVariable String postId, @RequestBody LikeEntity likeEntity) {
+    public ResponseEntity<ApiResponse> cancelLike(@PathVariable String postId, Member member) {
 
-        likeService.unLike(likeEntity);
+        likeService.unLike(LikeEntity.create(postId, member.getMemberId()));
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 }
