@@ -49,6 +49,9 @@ dependencies {
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+    /** M1 architecture */
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
+
 }
 
 test {
