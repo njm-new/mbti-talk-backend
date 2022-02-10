@@ -13,7 +13,7 @@ public interface CommentMapper {
     Integer createComment(CommentEntity commentEntity);
 
     @Select("SELECT * FROM comment WHERE commentId = #{commentId}")
-    CommentEntity findCommentByCommentId(long commentId);
+    CommentEntity findCommentByCommentId(String commentId);
 
     @Select("SELECT * FROM comment WHERE postId = #{postId}")
     List<CommentEntity> findCommentListByPostId(String postId);
@@ -22,10 +22,10 @@ public interface CommentMapper {
     Integer updateComment(CommentEntity commentEntity);
 
     @Delete("DELETE FROM comment WHERE commentId = #{commentId}")
-    Integer deleteCommentByCommentId(long commentId);
+    Integer deleteCommentByCommentId(String commentId);
 
     @Update("UPDATE comment SET modifiedTime = now() WHERE commentId = #{commentId}")
-    Integer updateCommentModifiedTime(long commentId);
+    Integer updateCommentModifiedTime(String commentId);
 
     @Select("SELECT COUNT(*) FROM comment WHERE postId = #{postId}")
     int countCommentByPostId(String postId);

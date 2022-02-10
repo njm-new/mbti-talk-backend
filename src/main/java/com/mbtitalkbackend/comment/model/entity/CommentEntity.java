@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentEntity {
 
-    private long commentId;
+    private String commentId;
     private String postId;
     private long recommentId;
     private String memberId;

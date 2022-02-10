@@ -10,7 +10,7 @@ public class PictureEntity {
 
     private long pictureId;
     private String postId;
-    private long commentId;
+    private String commentId;
     private String pictureName;
     private String pictureUrl;
     private String comment;

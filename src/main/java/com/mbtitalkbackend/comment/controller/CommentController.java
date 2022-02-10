@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable long commentId, @RequestBody CommentVO commentVO) {
+    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable String commentId, @RequestBody CommentVO commentVO) {
 
         commentService.updateComment(commentId, commentVO);
 
@@ -41,7 +41,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> deleteComment(@PathVariable String postId, @PathVariable long commentId) {
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable String postId, @PathVariable String commentId) {
 
         commentService.deleteCommentByCommentId(commentId);
 
