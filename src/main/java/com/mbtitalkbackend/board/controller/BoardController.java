@@ -35,6 +35,8 @@ public class BoardController {
 
         List<BoardVO> boardVOList = boardService.listPosts(pagingCriteria, "ALL");
 
+        boardVOList = boardService.checkLike(boardVOList, member);
+
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -44,6 +46,8 @@ public class BoardController {
 
         List<BoardVO> boardVOList = boardService.listPosts(pagingCriteria, mbti);
 
+        boardVOList = boardService.checkLike(boardVOList, member);
+
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -51,6 +55,7 @@ public class BoardController {
     @GetMapping("/myPosts")
     public ResponseEntity<ApiResponse> listMyPosts(@ModelAttribute PagingCriteria pagingCriteria, Member member) {
         List<BoardVO> boardVOList = boardService.listPosts(pagingCriteria, member);
+        boardVOList = boardService.checkLike(boardVOList, member);
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -58,6 +63,7 @@ public class BoardController {
     @GetMapping("/myComment")
     public ResponseEntity<ApiResponse> listMyCommentPosts(@ModelAttribute PagingCriteria pagingCriteria, Member member) {
         List<BoardVO> boardVOList = boardService.listCommentPosts(pagingCriteria, member);
+        boardVOList = boardService.checkLike(boardVOList, member);
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -65,6 +71,7 @@ public class BoardController {
     @GetMapping("/myLike")
     public ResponseEntity<ApiResponse> listMyLikePosts(@ModelAttribute PagingCriteria pagingCriteria, Member member) {
         List<BoardVO> boardVOList = boardService.listLikePosts(pagingCriteria, member);
+        boardVOList = boardService.checkLike(boardVOList, member);
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -72,6 +79,7 @@ public class BoardController {
     @GetMapping("/hot")
     public ResponseEntity<ApiResponse> listHotPosts(@ModelAttribute PagingCriteria pagingCriteria, Member member) {
         List<BoardVO> boardVOList = boardService.listHotPosts(pagingCriteria);
+        boardVOList = boardService.checkLike(boardVOList, member);
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 
@@ -79,6 +87,7 @@ public class BoardController {
     @GetMapping("/{mbti}/hot")
     public ResponseEntity<ApiResponse> listHotPostsInMbti(@PathVariable String mbti, @ModelAttribute PagingCriteria pagingCriteria, Member member) {
         List<BoardVO> boardVOList = boardService.listHotPostsWithMbti(pagingCriteria, mbti);
+        boardVOList = boardService.checkLike(boardVOList, member);
         return new ResponseEntity<>(ApiResponse.success(boardVOList), HttpStatus.OK);
     }
 }

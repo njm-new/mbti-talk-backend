@@ -130,4 +130,13 @@ public class BoardService {
 
         return boardVOList;
     }
+
+    public List<BoardVO> checkLike(List<BoardVO> boardVOList, Member member) {
+
+        for(BoardVO boardVO : boardVOList) {
+            boardVO.setLike((likeMapper.findLike(LikeEntity.create(boardVO.getPostId(), member.getMemberId())) != null));
+        }
+
+        return boardVOList;
+    }
 }
