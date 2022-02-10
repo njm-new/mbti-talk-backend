@@ -15,7 +15,7 @@ public class CommentEntity {
 
     private String commentId;
     private String postId;
-    private long recommentId;
+    private String recommentId;
     private String memberId;
     private String title;
     private String content;
