@@ -51,4 +51,8 @@ public class BoardVO {
 
         return boardVO;
     }
+
+    public void setLike(boolean like) {
+        this.like = like;
+    }
 }
