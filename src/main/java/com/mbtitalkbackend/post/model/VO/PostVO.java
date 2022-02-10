@@ -25,7 +25,9 @@ public class PostVO {
     private String mbti;
     private String nickname;
 
-    public static PostVO of(PostEntity postEntity, MemberEntity memberEntity) { //멤버 엔티티 추가 후 포스트에 벰버 정보 같이 담아 보내기용
+    private boolean like;
+
+    public static PostVO of(PostEntity postEntity, MemberEntity memberEntity, boolean like) { //멤버 엔티티 추가 후 포스트에 벰버 정보 같이 담아 보내기용
         PostVO postVO = new PostVO();
 
         postVO.postId = postEntity.getPostId();
@@ -39,6 +41,8 @@ public class PostVO {
         postVO.memberId = postEntity.getMemberId();
         postVO.mbti = memberEntity.getMbti();
         postVO.nickname = memberEntity.getNickname();
+
+        postVO.like = like;
 
         return postVO;
     }
