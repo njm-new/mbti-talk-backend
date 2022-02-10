@@ -1,5 +1,7 @@
 package com.mbtitalkbackend.post.service;
 
+import com.mbtitalkbackend.like.mapper.LikeMapper;
+import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
 import com.mbtitalkbackend.member.model.entity.MemberEntity;
 import com.mbtitalkbackend.post.mapper.PostMapper;
@@ -14,6 +16,7 @@ public class PostService {
 
     private final PostMapper postMapper;
     private final MemberMapper memberMapper;
+    private final LikeMapper likeMapper;
 
     public PostVO findPostEntityById(String postId) {
 
@@ -22,12 +25,15 @@ public class PostService {
 
             PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
             MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
-
+            final boolean like = likeMapper.findLike(LikeEntity.create(postId, memberEntity.getMemberId())) != null;
             //todo: Post boardId와 member Mbti 비교 필요
 
-            return PostVO.of(postEntity, memberEntity);
-        }
-        catch (NullPointerException e) {
+            return PostVO.of(
+                    postEntity,
+                    memberEntity,
+                    like
+            );
+        } catch (NullPointerException e) {
             throw new NullPointerException();
         }
     }
@@ -44,7 +50,7 @@ public class PostService {
         postMapper.updatePostModifiedTime(postId);
         PostEntity postEntity = postMapper.findPostEntityByPostId(postId);
 
-        if(postEntity == null)
+        if (postEntity == null)
             return 0;
 
         postEntity.setBoardId(postVO.getBoardId());
