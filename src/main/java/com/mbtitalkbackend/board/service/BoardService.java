@@ -35,21 +35,33 @@ public class BoardService {
     }
 
     public List<BoardVO> listPosts(PagingCriteria pagingCriteria) {
-        List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(pagingCriteria);
+        int pageNum = pagingCriteria.getPageNum();
+        int rowPerPage = pagingCriteria.getRowPerPage();
+        int offset = pageNum * rowPerPage;
+
+        List<PostEntity> postEntityList = boardMapper.findAllPostsWithPaging(offset, rowPerPage);
 
         return generateList(postEntityList);
     }
 
     // boardId로 검색 mbti or ALL
     public List<BoardVO> listPosts(PagingCriteria pagingCriteria, String boardId) {
-        List<PostEntity> postEntityList = boardMapper.findAllPostsWithBoardId(pagingCriteria, boardId);
+        int pageNum = pagingCriteria.getPageNum();
+        int rowPerPage = pagingCriteria.getRowPerPage();
+        int offset = pageNum * rowPerPage;
+
+        List<PostEntity> postEntityList = boardMapper.findAllPostsWithBoardId(offset, rowPerPage, boardId);
 
         return generateList(postEntityList);
     }
 
     // memberId로 검색, 내 게시글
     public List<BoardVO> listPosts(PagingCriteria pagingCriteria, Member member) {
-        List<PostEntity> postEntityList = boardMapper.findMyPosts(pagingCriteria, member.getMemberId());
+        int pageNum = pagingCriteria.getPageNum();
+        int rowPerPage = pagingCriteria.getRowPerPage();
+        int offset = pageNum * rowPerPage;
+
+        List<PostEntity> postEntityList = boardMapper.findMyPosts(offset, rowPerPage, member.getMemberId());
 
         return generateList(postEntityList);
     }
@@ -86,14 +98,22 @@ public class BoardService {
 
     // 전체 핫 게시글
     public List<BoardVO> listHotPosts(PagingCriteria pagingCriteria) {
-        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(pagingCriteria, "ALL");
+        int pageNum = pagingCriteria.getPageNum();
+        int rowPerPage = pagingCriteria.getRowPerPage();
+        int offset = pageNum * rowPerPage;
+
+        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(offset, rowPerPage, "ALL");
 
         return generateList(postEntityList);
     }
 
     // mbti 핫 게시글
     public List<BoardVO> listHotPostsWithMbti(PagingCriteria pagingCriteria, String mbti) {
-        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(pagingCriteria, mbti);
+        int pageNum = pagingCriteria.getPageNum();
+        int rowPerPage = pagingCriteria.getRowPerPage();
+        int offset = pageNum * rowPerPage;
+
+        List<PostEntity> postEntityList = boardMapper.findHotPostsWithBoardId(offset, rowPerPage, mbti);
 
         return generateList(postEntityList);
     }
