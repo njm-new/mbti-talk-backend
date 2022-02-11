@@ -18,12 +18,13 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<ApiResponse> createPosts(@RequestBody PostVO postVO) {
-        int res = postService.createPost(postVO);
-
-        if(res > 0)
-            return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK); // HTTP-STATUS.OK
-        else
+        try {
+            PostVO response = postService.createPost(postVO);
+            return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.OK); // HTTP-STATUS.OK
+        } catch (Exception e) {
+            // TODO global RestControllerAdvice를 구축해서 try-catch를 빼야 함 (exception도 글로벌리하게)
             return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST); // HTTP-STATUS.OK
+        }
     }
 
     @GetMapping("/{postId}") // 호출할일 없고, 디자인 잘해놨으면 메소드가 구분할 필요가없다
@@ -33,8 +34,7 @@ public class PostController {
             PostVO postVO = postService.findPostEntityById(postId);
 
             return new ResponseEntity<>(ApiResponse.success(postVO), HttpStatus.OK);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             String message = "postId에 해당하는 테이블이 없습니다.";
             return new ResponseEntity<>(ApiResponse.fail(message), HttpStatus.NOT_FOUND);
         }
@@ -45,7 +45,7 @@ public class PostController {
 
         int res = postService.patchPostById(postId, postVO);
 
-        if(res > 0)
+        if (res > 0)
             return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
         else
             return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST);
@@ -56,7 +56,7 @@ public class PostController {
 
         int res = postService.deletePostById(postId);
 
-        if(res > 0)
+        if (res > 0)
             return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
         else
             return new ResponseEntity<>(ApiResponse.fail("fail"), HttpStatus.BAD_REQUEST);
