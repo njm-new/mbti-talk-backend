@@ -72,14 +72,17 @@ public class BoardService {
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
 
         for (CommentEntity commentEntity : commentEntityList) {
+            System.out.println(commentEntity);
             linkedHashSet.add(commentEntity.getPostId());
         }
 
         List<PostEntity> postEntityList = new ArrayList<>();
 
         for (String postId : linkedHashSet) {
+            System.out.println(postId);
             postEntityList.add(postMapper.findPostEntityByPostId(postId));
         }
+
 
         return generateList(postEntityList);
     }
@@ -121,11 +124,15 @@ public class BoardService {
     public List<BoardVO> generateList(List<PostEntity> postEntityList) {
 
         List<BoardVO> boardVOList = new ArrayList<>();
-
+        System.out.println("1");
         for (PostEntity postEntity : postEntityList) {
+            System.out.println("2-1");
             MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
+            System.out.println("2-2");
             int commentCount = commentMapper.countCommentByPostId(postEntity.getPostId());
+            System.out.println("2-3");
             boardVOList.add(BoardVO.of(postEntity, memberEntity, commentCount));
+            System.out.println("2-4");
         }
 
         return boardVOList;

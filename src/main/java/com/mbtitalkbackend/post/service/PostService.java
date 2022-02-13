@@ -1,5 +1,6 @@
 package com.mbtitalkbackend.post.service;
 
+import com.mbtitalkbackend.comment.mapper.CommentMapper;
 import com.mbtitalkbackend.like.mapper.LikeMapper;
 import com.mbtitalkbackend.like.model.entity.LikeEntity;
 import com.mbtitalkbackend.member.mapper.MemberMapper;
@@ -17,6 +18,7 @@ public class PostService {
     private final PostMapper postMapper;
     private final MemberMapper memberMapper;
     private final LikeMapper likeMapper;
+    private final CommentMapper commentMapper;
 
     public PostVO findPostEntityById(String postId) {
 
@@ -73,6 +75,7 @@ public class PostService {
     }
 
     public Integer deletePostById(String postId) {
+        commentMapper.deleteCommentByPostId(postId);
         return postMapper.deletePostByPostId(postId);
     }
 }
