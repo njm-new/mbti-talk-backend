@@ -87,4 +87,19 @@ public class MemberController {
         }
         return new ResponseEntity<>(ApiResponse.success(RefreshTokenVO.from(accessTokenManager.create(memberId))), HttpStatus.OK);
     }
+
+    /* Local 테스트용 임시 */
+    @PostMapping("/local")
+    public ResponseEntity<ApiResponse> loginForLocal(@RequestBody LoginRequestVO loginRequestVO) {
+        try {
+            MemberDTO member = memberService.loginForLocal(loginRequestVO);
+            final String accessToken = accessTokenManager.create(member.getMemberId());
+
+            return new ResponseEntity<>(ApiResponse.success(LoginResponseVO.of(accessToken, member)), HttpStatus.OK);
+        } catch (KakaoAuthenticationException e) {
+            return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.FORBIDDEN);
+        } catch (IllegalAccessException e) {
+            return new ResponseEntity<>(ApiResponse.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

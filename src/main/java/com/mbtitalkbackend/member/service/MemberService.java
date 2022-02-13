@@ -134,4 +134,45 @@ public class MemberService {
 
         return memberNickname;
     }
+
+    /* Local 테스트용 임시 */
+    public MemberDTO loginForLocal(LoginRequestVO loginRequestVO) throws IllegalAccessException {
+        String memberId;
+        String snsType = loginRequestVO.getSnsType();
+        String snsCode = loginRequestVO.getSnsCode();
+
+        switch (SnsType.compare(snsType)) {
+            case KAKAO:
+                try {
+                    //Authenticate user from Kakao
+                    String kakaoAccessToken = loginRequestVO.getSnsAccessToken();
+                    if (StringUtils.isBlank(kakaoAccessToken)) {
+                        kakaoAccessToken = kakaoClient.getAccessTokenForLocal(snsCode);
+                    }
+
+                    memberId = kakaoClient.getMemberId(kakaoAccessToken);
+                } catch (JsonProcessingException e) {
+                    log.error(e.getMessage());
+                    throw new KakaoAuthenticationException();
+                }
+                break;
+
+            default:
+                log.error(snsType);
+                throw new IllegalAccessException();
+        }
+        //Check user
+        MemberDTO member = memberRepository.getMemberInfo(memberId);
+
+        //if newbie == signUp
+        if (member == null) {
+            //Generate nickname
+            String memberNickname = createNickName();
+
+            //Insert member data into DB
+            member = MemberDTO.of(memberId, memberNickname);
+            memberRepository.register(member);
+        }
+        return member;
+    }
 }
