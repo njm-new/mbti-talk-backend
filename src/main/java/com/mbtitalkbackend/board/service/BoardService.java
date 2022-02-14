@@ -124,15 +124,10 @@ public class BoardService {
     public List<BoardVO> generateList(List<PostEntity> postEntityList) {
 
         List<BoardVO> boardVOList = new ArrayList<>();
-        System.out.println("1");
         for (PostEntity postEntity : postEntityList) {
-            System.out.println("2-1");
             MemberEntity memberEntity = memberMapper.findMemberById(postEntity.getMemberId());
-            System.out.println("2-2");
             int commentCount = commentMapper.countCommentByPostId(postEntity.getPostId());
-            System.out.println("2-3");
             boardVOList.add(BoardVO.of(postEntity, memberEntity, commentCount));
-            System.out.println("2-4");
         }
 
         return boardVOList;
