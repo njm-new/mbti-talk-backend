@@ -1,6 +1,7 @@
 package com.mbtitalkbackend.post.controller;
 
 import com.mbtitalkbackend.common.ApiResponse;
+import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.post.model.VO.PostVO;
 import com.mbtitalkbackend.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,9 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createPosts(@RequestBody PostVO postVO) {
+    public ResponseEntity<ApiResponse> createPosts(@RequestBody PostVO postVO, Member member) {
         try {
-            PostVO response = postService.createPost(postVO);
+            PostVO response = postService.createPost(postVO, member);
             return new ResponseEntity<>(ApiResponse.success(response), HttpStatus.OK); // HTTP-STATUS.OK
         } catch (Exception e) {
             // TODO global RestControllerAdvice를 구축해서 try-catch를 빼야 함 (exception도 글로벌리하게)
@@ -28,10 +29,10 @@ public class PostController {
     }
 
     @GetMapping("/{postId}") // 호출할일 없고, 디자인 잘해놨으면 메소드가 구분할 필요가없다
-    public ResponseEntity<ApiResponse> readPostsByPostId(@PathVariable("postId") String postId) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
+    public ResponseEntity<ApiResponse> readPostsByPostId(@PathVariable("postId") String postId, Member member) { //리턴 타입 DTO로 설정, 카멜케이스로 변경
 
         try {
-            PostVO postVO = postService.findPostEntityById(postId);
+            PostVO postVO = postService.findPostEntityById(postId, member);
 
             return new ResponseEntity<>(ApiResponse.success(postVO), HttpStatus.OK);
         } catch (NullPointerException e) {
