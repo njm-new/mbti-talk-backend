@@ -16,5 +16,4 @@ cred:
   kakao:
     grant-type: authorization_code
     client-id: 51ebe5eee7b316d51aaf6b3aa6a87496
-#    redirect-uri: http://localhost:3000/callback
-    redirect-uri: http://mbti-talk.com
+    redirect-uri: http://mbti-talk.com/callback
