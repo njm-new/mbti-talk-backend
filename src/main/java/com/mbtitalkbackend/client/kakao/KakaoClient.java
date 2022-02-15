@@ -90,4 +90,38 @@ public class KakaoClient {
 
         return kakaoMemberEntity.getId();
     }
+
+    /* Local 테스트용 임시 */
+    public String getAccessTokenForLocal(String code) throws JsonProcessingException {
+        MultiValueMap<String, String> payload = new LinkedMultiValueMap<>();
+        payload.add("grant_type", GRANT_TYPE);
+        payload.add("client_id", CLIENT_ID);
+        payload.add("redirect_uri", "http://localhost:3000/callback");
+        payload.add("code", code);
+
+        KaKaoAccessTokenEntity kaKaoAccessTokenEntity;
+        try {
+            Mono<KaKaoAccessTokenEntity> kaKaoAccessTokenEntityMono = webClient.mutate()
+                    .baseUrl("https://kauth.kakao.com")
+                    .build()
+                    .post()
+                    .uri("/oauth/token")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .bodyValue(payload)
+                    .exchangeToMono(clientResponse -> {
+                        if (clientResponse.statusCode() != HttpStatus.OK) {
+                            return null;
+                        }
+                        return clientResponse.bodyToMono(KaKaoAccessTokenEntity.class);
+                    });
+
+            kaKaoAccessTokenEntity = kaKaoAccessTokenEntityMono
+                    .share()
+                    .block();
+        } catch (NullPointerException e) {
+            throw new KakaoAuthenticationException();
+        }
+        return kaKaoAccessTokenEntity.getAccess_token();
+    }
 }

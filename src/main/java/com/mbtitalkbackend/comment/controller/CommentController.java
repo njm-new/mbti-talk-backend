@@ -4,6 +4,7 @@ import com.mbtitalkbackend.comment.model.VO.CommentVOList;
 import com.mbtitalkbackend.comment.model.VO.CommentVO;
 import com.mbtitalkbackend.comment.service.CommentService;
 import com.mbtitalkbackend.common.ApiResponse;
+import com.mbtitalkbackend.member.model.vo.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +26,17 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createComment(@PathVariable String postId, @RequestBody CommentVO commentVO) {
+    public ResponseEntity<ApiResponse> createComment(@PathVariable String postId, @RequestBody CommentVO commentVO, Member member) {
 
-        commentService.createComment(commentVO);
+        commentService.createComment(CommentVO.create(postId, commentVO.getContent(), member));
 
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable String commentId, @RequestBody CommentVO commentVO) {
+    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable long commentId, @RequestBody CommentVO commentVO, Member member) {
 
-        commentService.updateComment(commentId, commentVO);
+        commentService.updateComment(commentId, CommentVO.create(postId, commentVO.getContent(), member));
 
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }

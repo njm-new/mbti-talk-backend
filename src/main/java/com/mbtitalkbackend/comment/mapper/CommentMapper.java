@@ -24,6 +24,9 @@ public interface CommentMapper {
     @Delete("DELETE FROM comment WHERE commentId = #{commentId}")
     Integer deleteCommentByCommentId(String commentId);
 
+    @Delete("DELETE FROM comment WHERE postId = #{postId}")
+    Integer deleteCommentByPostId(String postId);
+
     @Update("UPDATE comment SET modifiedTime = now() WHERE commentId = #{commentId}")
     Integer updateCommentModifiedTime(String commentId);
 
