@@ -42,7 +42,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> deleteComment(@PathVariable String postId, @PathVariable long commentId) {
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable String postId, @PathVariable String commentId) {
 
         commentService.deleteCommentByCommentId(commentId);
 

@@ -26,7 +26,7 @@ public class CommentService {
         return commentMapper.createComment(commentEntity);
     }
 
-    public CommentVO findCommentByCommentId(long commentId) {
+    public CommentVO findCommentByCommentId(String commentId) {
 
         try {
             CommentEntity commentEntity = commentMapper.findCommentByCommentId(commentId);
@@ -55,7 +55,7 @@ public class CommentService {
         return CommentVOList.create(commentCount, commentList);
     }
 
-    public Integer updateComment(long commentId, CommentVO commentVO) {
+    public Integer updateComment(String commentId, CommentVO commentVO) {
 
         try {
             commentMapper.updateCommentModifiedTime(commentId);
@@ -71,7 +71,7 @@ public class CommentService {
 
     }
 
-    public Integer deleteCommentByCommentId(long commentId) {
+    public Integer deleteCommentByCommentId(String commentId) {
 
         return commentMapper.deleteCommentByCommentId(commentId);
 

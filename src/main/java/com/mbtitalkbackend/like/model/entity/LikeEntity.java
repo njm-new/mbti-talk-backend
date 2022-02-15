@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LikeEntity {
 
-    private int likeId;
+    private String likeId;
     private String postId;
     private String memberId;
 

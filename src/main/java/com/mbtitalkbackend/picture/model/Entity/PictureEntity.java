@@ -8,9 +8,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PictureEntity {
 
-    private long pictureId;
+    private String pictureId;
     private String postId;
-    private long commentId;
+    private String commentId;
     private String pictureName;
     private String pictureUrl;
     private String comment;
