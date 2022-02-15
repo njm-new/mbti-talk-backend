@@ -34,7 +34,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable long commentId, @RequestBody CommentVO commentVO, Member member) {
+    public ResponseEntity<ApiResponse> patchComment(@PathVariable String postId, @PathVariable String commentId, @RequestBody CommentVO commentVO, Member member) {
 
         commentService.updateComment(commentId, CommentVO.create(postId, commentVO.getContent(), member));
 
