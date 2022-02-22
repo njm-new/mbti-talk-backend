@@ -6,6 +6,8 @@ import com.mbtitalkbackend.picture.model.Entity.PictureEntity;
 import com.mbtitalkbackend.picture.model.VO.ImageVO;
 import com.mbtitalkbackend.picture.model.VO.ImageVOList;
 import com.mbtitalkbackend.picture.model.VO.ImageInfoVO;
+import com.mbtitalkbackend.util.generator.IdGenerator;
+import com.mbtitalkbackend.util.generator.ServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +24,13 @@ public class PictureService {
 
     private final AwsS3UploadService s3Service;
     private final PictureMapper pictureMapper;
+    private final IdGenerator idGenerator;
 
     public List<ImageInfoVO> uploadImages(String postId, ImageVOList imageVOList) {
 
         List<ImageInfoVO> imageInfoVOList = new ArrayList<>();
 
-        imageVOList.getImageVOList().forEach(imageVO -> {
-
-            imageInfoVOList.add(uploadImage(postId, imageVO));
-        });
+        imageVOList.getImageVOList().forEach(imageVO -> imageInfoVOList.add(uploadImage(postId, imageVO)));
 
         return imageInfoVOList;
     }
@@ -49,8 +49,8 @@ public class PictureService {
             throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다. (%s)", imageVO.getFile().getOriginalFilename()));
 //                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
         }
-
-        PictureEntity pictureEntity = PictureEntity.of(postId, fileName, s3Service.getFileUrl(fileName), imageVO.getComment());
+        String pictureId = idGenerator.generate(ServiceType.PICTURE);
+        PictureEntity pictureEntity = PictureEntity.of(pictureId, postId, fileName, s3Service.getFileUrl(fileName), imageVO.getComment());
         pictureMapper.insertPicture(pictureEntity);
 
         return ImageInfoVO.from(pictureEntity);
@@ -72,9 +72,7 @@ public class PictureService {
         List<PictureEntity> pictureEntityList = pictureMapper.findAllPictureEntityByPostId(postId);
         List<ImageInfoVO> imageInfoVOList = new ArrayList<>();
 
-        pictureEntityList.forEach(pictureEntity -> {
-            imageInfoVOList.add(ImageInfoVO.from(pictureEntity));
-        });
+        pictureEntityList.forEach(pictureEntity -> imageInfoVOList.add(ImageInfoVO.from(pictureEntity)));
 
         return imageInfoVOList;
     }

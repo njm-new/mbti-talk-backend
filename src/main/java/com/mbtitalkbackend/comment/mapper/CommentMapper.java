@@ -8,8 +8,7 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("INSERT INTO comment (postId, memberId, content, likeCount) VALUES(#{postId}, #{memberId}, #{content}, #{likeCount})")
-    @Options(useGeneratedKeys = true, keyProperty = "commentId")
+    @Insert("INSERT INTO comment (commentId, postId, memberId, content, likeCount) VALUES(#{commentId}, #{postId}, #{memberId}, #{content}, #{likeCount})")
     Integer createComment(CommentEntity commentEntity);
 
     @Select("SELECT * FROM comment WHERE commentId = #{commentId}")
