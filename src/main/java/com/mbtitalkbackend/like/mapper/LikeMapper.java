@@ -8,8 +8,7 @@ import java.util.List;
 @Mapper
 public interface LikeMapper {
 
-    @Insert("INSERT INTO memberLike (postId, memberId) VALUES(#{postId}, #{memberId})")
-    @Options(useGeneratedKeys = true, keyProperty = "likeId")
+    @Insert("INSERT INTO memberLike (likeId, postId, memberId) VALUES(#{likeId}, #{postId}, #{memberId})")
     Integer createLike(LikeEntity likeEntity);
 
     @Delete("DELETE FROM memberLike WHERE postId = #{postId} AND memberId = #{memberId}")

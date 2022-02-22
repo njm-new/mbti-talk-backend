@@ -21,4 +21,14 @@ public class LikeEntity {
 
         return likeEntity;
     }
+
+    public static LikeEntity create(String likeId, String postId, String memberId) {
+        LikeEntity likeEntity = new LikeEntity();
+
+        likeEntity.likeId = likeId;
+        likeEntity.postId = postId;
+        likeEntity.memberId = memberId;
+
+        return likeEntity;
+    }
 }
