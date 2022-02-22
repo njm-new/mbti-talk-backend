@@ -6,8 +6,7 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface PostMapper {
 
-    @Insert("INSERT INTO post (boardId, memberId, title, content, viewCount, likeCount) VALUES(#{boardId}, #{memberId}, #{title}, #{content}, #{viewCount}, #{likeCount})")
-    @Options(useGeneratedKeys = true, keyProperty = "postId")
+    @Insert("INSERT INTO post (postId, boardId, memberId, title, content, viewCount, likeCount) VALUES(#{postId}, #{boardId}, #{memberId}, #{title}, #{content}, #{viewCount}, #{likeCount})")
     Integer postPost(PostEntity postEntity);
 
     @Select("SELECT * FROM post WHERE postId = #{postId}")

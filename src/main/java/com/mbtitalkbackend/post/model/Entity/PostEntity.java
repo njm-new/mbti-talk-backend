@@ -20,7 +20,8 @@ public class PostEntity {
     private Timestamp createTime;
     private Timestamp modifiedTime;
 
-    private PostEntity(PostVO postVO, long viewCount, long likeCount) {
+    private PostEntity(PostVO postVO, String postId, long viewCount, long likeCount) {
+        this.postId = postId;
         this.boardId = postVO.getBoardId();
         this.memberId = postVO.getMemberId();
         this.title = postVO.getTitle();
@@ -29,8 +30,8 @@ public class PostEntity {
         this.likeCount = likeCount;
     }
 
-    public static PostEntity create(PostVO postVO) {
+    public static PostEntity create(PostVO postVO, String postId) {
 
-        return new PostEntity(postVO, 0, 0);
+        return new PostEntity(postVO, postId, 0, 0);
     }
 }
