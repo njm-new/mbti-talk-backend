@@ -8,8 +8,7 @@ import java.util.List;
 @Mapper
 public interface PictureMapper {
 
-    @Insert("INSERT INTO picture (postId, pictureName, pictureUrl, comment) VALUES (#{postId}, #{pictureName}, #{pictureUrl}, #{comment})")
-    @Options(useGeneratedKeys = true, keyProperty = "pictureId")
+    @Insert("INSERT INTO picture (pictureId, postId, pictureName, pictureUrl, comment) VALUES (#{pictureId}, #{postId}, #{pictureName}, #{pictureUrl}, #{comment})")
     Integer insertPicture(PictureEntity pictureEntity);
 
     @Select("SELECT * FROM picture WHERE postId = #{postId}")

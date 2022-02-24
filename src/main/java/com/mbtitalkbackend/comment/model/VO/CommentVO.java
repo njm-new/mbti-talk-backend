@@ -41,9 +41,10 @@ public class CommentVO {
         return commentVO;
     }
 
-    public static CommentVO create(String postId, String content, Member member) {
+    public static CommentVO create(String commentId, String postId, String content, Member member) {
         CommentVO commentVO = new CommentVO();
 
+        commentVO.commentId = commentId;
         commentVO.postId = postId;
         commentVO.content = content;
         commentVO.memberId = member.getMemberId();

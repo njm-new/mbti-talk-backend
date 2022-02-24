@@ -12,22 +12,20 @@ import com.mbtitalkbackend.util.authrization.AuthorizationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-@Service
 @Slf4j
+@RequiredArgsConstructor
+@Service
 public class MemberService {
+
     private final KakaoClient kakaoClient;
     private final MemberRepository memberRepository;
-
-    public MemberService(KakaoClient kakaoClient, MemberRepository memberRepository) {
-        this.kakaoClient = kakaoClient;
-        this.memberRepository = memberRepository;
-    }
 
     public MemberDTO login(LoginRequestVO loginRequestVO) throws IllegalAccessException {
         String memberId;
@@ -43,7 +41,7 @@ public class MemberService {
                         kakaoAccessToken = kakaoClient.getAccessToken(snsCode);
                     }
 
-                    memberId = kakaoClient.getMemberId(kakaoAccessToken);
+                    memberId = SnsType.KAKAO.name() + '-' + kakaoClient.getMemberId(kakaoAccessToken);
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
                     throw new KakaoAuthenticationException();

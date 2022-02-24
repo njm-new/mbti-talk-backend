@@ -17,9 +17,10 @@ public class PictureEntity {
     private Timestamp createTime;
     private Timestamp modifiedTime;
 
-    public static PictureEntity of (String postId, String pictureName, String pictureUrl, String comment) {
+    public static PictureEntity of (String pictureId, String postId, String pictureName, String pictureUrl, String comment) {
         PictureEntity pictureEntity = new PictureEntity();
 
+        pictureEntity.pictureId = pictureId;
         pictureEntity.postId = postId;
         pictureEntity.pictureName = pictureName;
         pictureEntity.pictureUrl = pictureUrl;

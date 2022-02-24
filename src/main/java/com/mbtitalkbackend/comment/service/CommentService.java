@@ -55,11 +55,11 @@ public class CommentService {
         return CommentVOList.create(commentCount, commentList);
     }
 
-    public Integer updateComment(String commentId, CommentVO commentVO) {
+    public Integer updateComment(CommentVO commentVO) {
 
         try {
-            commentMapper.updateCommentModifiedTime(commentId);
-            CommentEntity commentEntity = commentMapper.findCommentByCommentId(commentId);
+            commentMapper.updateCommentModifiedTime(commentVO.getCommentId());
+            CommentEntity commentEntity = commentMapper.findCommentByCommentId(commentVO.getCommentId());
 
 //            commentEntity.setMemberId(commentVO.getMemberId());
             commentEntity.setContent(commentVO.getContent());

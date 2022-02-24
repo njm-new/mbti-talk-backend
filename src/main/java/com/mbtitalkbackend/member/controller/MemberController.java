@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/members")
 @RequiredArgsConstructor
 public class MemberController {
+
     private final AccessTokenManager accessTokenManager;
     private final MemberService memberService;
 

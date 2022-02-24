@@ -9,6 +9,8 @@ import com.mbtitalkbackend.member.model.vo.Member;
 import com.mbtitalkbackend.post.mapper.PostMapper;
 import com.mbtitalkbackend.post.model.Entity.PostEntity;
 import com.mbtitalkbackend.post.model.VO.PostVO;
+import com.mbtitalkbackend.util.generator.IdGenerator;
+import com.mbtitalkbackend.util.generator.ServiceType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ public class PostService {
     private final MemberMapper memberMapper;
     private final LikeMapper likeMapper;
     private final CommentMapper commentMapper;
+    private final IdGenerator idGenerator;
 
     public PostVO findPostEntityById(String postId, Member member) {
 
@@ -42,7 +45,9 @@ public class PostService {
     }
 
     public PostVO createPost(PostVO postVO, Member member) throws Exception {
-        PostEntity postEntity = PostEntity.create(postVO);
+        String postId = idGenerator.generate(ServiceType.POST);
+
+        PostEntity postEntity = PostEntity.create(postVO, postId);
 
         int res = postMapper.postPost(postEntity);
         //useGeneratedKeys를 사용하여 postEntity에 id가 할당됨
