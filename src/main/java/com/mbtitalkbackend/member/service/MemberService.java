@@ -41,7 +41,7 @@ public class MemberService {
                         kakaoAccessToken = kakaoClient.getAccessToken(snsCode);
                     }
 
-                    memberId = SnsType.KAKAO.name() + '-' + kakaoClient.getMemberId(kakaoAccessToken);
+                    memberId = SnsType.KAKAO.name().toLowerCase() + '-' + kakaoClient.getMemberId(kakaoAccessToken);
                 } catch (JsonProcessingException e) {
                     log.error(e.getMessage());
                     throw new KakaoAuthenticationException();
