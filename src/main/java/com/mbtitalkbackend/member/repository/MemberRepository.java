@@ -19,6 +19,7 @@ public class MemberRepository {
         MemberEntity memberEntity = memberMapper.findMemberById(memberId);
 
         if (memberEntity == null) {
+            //todo null 예외처리
             return null;
         }
 
